@@ -2,14 +2,16 @@
 <html>
     <head>
         <title>FilmQuest</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
         <header>
+        <div class="navbar">
             <a href="#" class="logo">
                 <img src="images/logo.png" alt="FilmQuest Logo" class="logo-img">
             </a>
-            <ul>
+            <ul class="links">
                 <li><a href="#" class="active">Home</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">WatchList</a></li>
@@ -17,13 +19,61 @@
                 <li><a href="#">Help</a></li>
                 <li><a href="#">Login</a></li>
             </ul>
+            <div class="toggle_btn">
+                <i class="fa-solid fa-bars" style="color: #fff;"></i>
+            </div>
+        </div>
         </header>
+        <div class="dropdown_menu">
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">WatchList</a></li>
+            <li><a href="#">WorldMap</a></li>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Login</a></li>
+        </div>
+        <div class="title_search">
+            <h2 id="text">FilmQuest</h2>
+            <div class="search">
+                <input type="text" class="input" placeholder="Search...">
+            </div>
+        </div>
         <section class="container">
             <div class="bucket">
                 <img src="images/popcorn-buckets.png" class="bucket-image">
             </div>
-            <h2 id="text">FilmQuest</h2>
-            <img src="images/one_popcorn.png" class="popcorn">
+            <img src="images/one_popcorn.png" class="popcorn" id="popcorn">
         </section>
+        <script>
+            const toggleBtn = document.querySelector('.toggle_btn')
+            const toggleBtnIcon = document.querySelector('.toggle_btn i')
+            const dropDownMenu = document.querySelector('.dropdown_menu')
+
+            toggleBtn.onclick = function() {
+                dropDownMenu.classList.toggle('open')
+                const isOpen = dropDownMenu.classList.contains('open')
+                toggleBtnIcon.classList = isOpen
+                ? 'fa-solid fa-xmark'
+                : 'fa-solid fa-bars'
+            }
+        </script>
+        <script>
+            window.onscroll = function() {scrollFunction()};
+            
+            function scrollFunction() {
+                var popcorn = document.getElementById("popcorn");
+                if (!popcorn) return; // Ensure popcorn exists before proceeding
+                var scrollTop = window.scrollY;
+                var stopScroll = 500; // Adjust this value to determine when to stop scrolling
+                
+                if (scrollTop > stopScroll) {
+                    popcorn.style.position = "absolute";
+                    popcorn.style.top = stopScroll + "px";
+                } else {
+                    popcorn.style.position = "fixed";
+                    popcorn.style.top = "88%"; // Adjust the initial fixed position
+                }
+            }
+        </script>
     </body>
 </html>

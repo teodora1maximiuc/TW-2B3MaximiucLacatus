@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
-* {
+@font-face {
+    font-family: 'Lucky Bones';
+    src: url('Luckybones-Bold.ttf') format('truetype'); 
+}
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -7,14 +11,16 @@
 }
 body {
     min-height: 100vh;
-    background: linear-gradient(#57648C,#C2B4D6);
+    background-image: url('images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
-header {
-    position: absolute;
-    top: 0;
+.navbar {
+    position: fixed;
+    top: -10px;
     left: 0;
     width: 100%;
-    padding: 10px 50px;
+    padding: 0px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,31 +35,90 @@ header ul {
     justify-content: center;
     align-items: center;
 }
-header ul li {
+.navbar ul li,
+.dropdown_menu li {
     list-style: none;
     margin-left: 20px;
+    z-index: 1000;
 }
-header ul li a {
+.navbar ul li a,
+.dropdown_menu li a{
     text-decoration: none;
     padding: 6px 15px;
     color: #fff;
     border-radius: 20px;
+    z-index: 1001;
 }
-header ul li a:hover, 
-header ul li a.active{
+.navbar ul li a:hover, 
+.navbar ul li a.active{
     background-color: #fff !important;
     color: #57648C !important;
+}
+.navbar .toggle_btn {
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+}
+/* DROPDOWN MENU */
+.dropdown_menu {
+    display: none;
+    position: absolute;
+    right: 2rem; 
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10000;
+}
+.dropdown_menu.open {
+    height: 240px;
+}
+.dropdown_menu li{
+    padding: 0.7 rem;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+.dropdown_menu li a:hover {
+    background-color: #fff !important;
+    color: #57648C !important;
+}
+/* RESPONSIVE NAV BAR */
+@media(max-width: 992px) {
+    .navbar .links {
+        display: none;
+    }
+    .navbar .toggle_btn {
+        display: block;
+    }
+    .dropdown_menu {
+        display: block;
+    }
+    .popcorn {
+        display: none;
+    }
+}
+@media(max-width: 576px) {
+    .dropdown_menu {
+        left: 2rem;
+        width: unset;
+    }
 }
 .container {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
 }
 
 .bucket {
     position: relative;
-    top: 100px;
+    top: 250px;
     width: 100%;
 }
 
@@ -63,17 +128,39 @@ header ul li a.active{
 
 .popcorn {
     position: fixed;
-    top: 70%; 
+    top: 88%; 
     left: 20%; 
     transform: translate(-50%, -50%);
     max-width: 100%; /* Adjust the maximum width of the popcorn */
     width: 10%; /* Set the initial width of the popcorn */
-    z-index: 1;
+    z-index: 10;
 }
-#text{
+.title_search {
     position: absolute;
+    top: 200px; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%);
+    text-align: center; /* Align text to center */
+    z-index: 1001;
+}
+
+.title_search #text {
+    font-family: 'Lucky Bones';
     color: #934A5F;
-    white-space: nowrap;
-    font-size: 7.5vw;
-    z-index: 2;
+    white-space: inherit;
+    font-size: 9vw;
+    text-shadow: -2px -2px 0 #e5e5e5, 2px -2px 0 #e5e5e5, -2px 2px 0 #e5e5e5, 2px 2px 0 #e5e5e5;
+}
+
+.title_search .search {
+    margin-top: 20px; /* Adjust the spacing between title and search bar */
+}
+
+.title_search .search .input {
+    border: 0;
+    outline: none;
+    width: 80%; /* Set the width of the input field */
+    padding: 10px; /* Adjust padding as needed */
+    font-size: 1.2em; /* Increase font size */
+    border-radius: 20px; /* Add border-radius for rounded corners */
 }
