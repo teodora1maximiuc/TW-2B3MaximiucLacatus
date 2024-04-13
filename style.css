@@ -9,11 +9,17 @@
     box-sizing: border-box;
     font-family: 'Poppins',sans-serif;
 }
-body {
+.section1 {
     min-height: 100vh;
     background-image: url('images/background.png');
     background-size: cover;
-    background-repeat: no-repeat;
+    /*background-repeat: no-repeat;*/
+}
+.section2 {
+    min-height: 100vh;
+    background-image: url('images/background.png');
+    background-size: cover;
+    /*background-repeat: no-repeat;*/
 }
 .navbar {
     position: fixed;
@@ -62,7 +68,7 @@ header ul {
 /* DROPDOWN MENU */
 .dropdown_menu {
     display: none;
-    position: absolute;
+    position: fixed;
     right: 2rem; 
     top: 60px;
     height: 0;
@@ -118,7 +124,7 @@ header ul {
 
 .bucket {
     position: relative;
-    top: 250px;
+    bottom: 0;
     width: 100%;
 }
 
@@ -131,17 +137,17 @@ header ul {
     top: 88%; 
     left: 20%; 
     transform: translate(-50%, -50%);
-    max-width: 100%; /* Adjust the maximum width of the popcorn */
-    width: 10%; /* Set the initial width of the popcorn */
-    z-index: 10;
+    max-width: 100%; 
+    width: 10%; 
+    z-index: 1000;
 }
 .title_search {
     position: absolute;
-    top: 200px; /* Center vertically */
-    left: 50%; /* Center horizontally */
+    top: 200px;
+    left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center; /* Align text to center */
-    z-index: 1001;
+    text-align: center; 
+    z-index: 999;
 }
 
 .title_search #text {
@@ -153,14 +159,14 @@ header ul {
 }
 
 .title_search .search {
-    margin-top: 20px; /* Adjust the spacing between title and search bar */
+    margin-top: 20px; 
 }
 
 .title_search .search .input {
     border: 0;
     outline: none;
-    width: 80%; /* Set the width of the input field */
-    padding: 10px; /* Adjust padding as needed */
-    font-size: 1.2em; /* Increase font size */
-    border-radius: 20px; /* Add border-radius for rounded corners */
+    width: 80%;
+    padding: 10px;
+    font-size: 1.2em;
+    border-radius: 20px; 
 }

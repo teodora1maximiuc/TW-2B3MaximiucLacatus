@@ -6,6 +6,7 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
+        <section class = "section1">
         <header>
         <div class="navbar">
             <a href="#" class="logo">
@@ -58,22 +59,30 @@
             }
         </script>
         <script>
-            window.onscroll = function() {scrollFunction()};
-            
+            window.addEventListener('scroll', function() {
+                scrollFunction();
+            });
+        
             function scrollFunction() {
                 var popcorn = document.getElementById("popcorn");
                 if (!popcorn) return; // Ensure popcorn exists before proceeding
+                
                 var scrollTop = window.scrollY;
                 var stopScroll = 500; // Adjust this value to determine when to stop scrolling
+                var stopPosition = 2000; // Adjust this value to determine the stop position from the top of the page
                 
                 if (scrollTop > stopScroll) {
                     popcorn.style.position = "absolute";
-                    popcorn.style.top = stopScroll + "px";
+                    popcorn.style.top = 2000;
                 } else {
                     popcorn.style.position = "fixed";
                     popcorn.style.top = "88%"; // Adjust the initial fixed position
                 }
             }
         </script>
+        </section>
+        <section class = "section2">
+
+        </section>
     </body>
 </html>
