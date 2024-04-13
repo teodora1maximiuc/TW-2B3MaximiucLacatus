@@ -126,6 +126,7 @@ header ul {
     position: relative;
     bottom: 0;
     width: 100%;
+    max-block-size: 200px;
 }
 
 .bucket-image {
@@ -147,6 +148,8 @@ header ul {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center; 
+    width: 80%; 
+    max-width: 600px;
     z-index: 999;
 }
 
@@ -154,19 +157,20 @@ header ul {
     font-family: 'Lucky Bones';
     color: #934A5F;
     white-space: inherit;
-    font-size: 9vw;
+    font-size: 10vw;
     text-shadow: -2px -2px 0 #e5e5e5, 2px -2px 0 #e5e5e5, -2px 2px 0 #e5e5e5, 2px 2px 0 #e5e5e5;
 }
 
 .title_search .search {
-    margin-top: 20px; 
+    margin-top: 5px; 
+    width: 100%;
 }
 
 .title_search .search .input {
     border: 0;
     outline: none;
-    width: 80%;
+    width: 100%;
     padding: 10px;
-    font-size: 1.2em;
+    font-size: 1em;
     border-radius: 20px; 
 }
