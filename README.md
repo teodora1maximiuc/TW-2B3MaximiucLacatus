@@ -2,6 +2,7 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
+    <title>MoX (Movies and TV Shows Explorer) / FilmQuest</title>
 </head>
 <body>
 <article>
