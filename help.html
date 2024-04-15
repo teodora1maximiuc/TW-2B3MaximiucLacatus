@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>FilmQuest</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="watchList.css">
+    <link rel="stylesheet" type="text/css" href="help.css">
     <link href="https://fonts.googleapis.com/css?family=Lucky+Bones&display=swap" rel="stylesheet">
     <link rel="icon" href="images/tab_logo.png" type="image/x-icon">
 </head>
@@ -18,9 +18,9 @@
                 <ul class="links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="index.html#about-section">About</a></li>
-                    <li><a href="watchList.html" class="active">WatchList</a></li>
+                    <li><a href="watchList.html">WatchList</a></li>
                     <li><a href="explore.html">Explore</a></li>
-                    <li><a href="help.html">Help</a></li>
+                    <li><a href="help.html" class="active">Help</a></li>
                     <li><a href="login.html">Login</a></li>
                 </ul>
                 <div class="toggle_btn">
@@ -28,52 +28,41 @@
                 </div>
             </div>
         </header>
-        <div class="not-logged-in">
-            <div class="not-logged-in-content">
-                <h2>You are not logged in.</h2>
-                <p>To see your Watch Lists, you need to log in first.</p>
-                <p><a href="login.html">Go to Login page.</a></p>
-            </div>
+        <div class="title">
+            <h1>Help Center</h1>
         </div>
-        <div class="watch-list-nav">
-            <div class="list-bar">
-                <ul>
-                    <li><a href="#" class="active">All</a></li>
-                    <li><a href="#">Watching</a></li>
-                    <li><a href="#">Completed</a></li>
-                    <li><a href="#">Dropped</a></li>
-                    <li><a href="#">Plan to Watch</a></li>
-                    <li><h1 class="page-title">Watch List</h1></li>
-                </ul>
+        <div class="help-cont">
+            <div class="help-info">
+                <h2>Finding Movies</h2>
+                <p>If you're looking for a specific movie, use our search feature located on the <a href="index.html">Home</a> page. Simply enter the movie title or keywords related to the movie, and we'll provide you with relevant results.</p>
+                <p>Or, for a more precise result, use our Explore feature which allows you to customize your search in order to get better results.</p>
+            </div>
+            <div class="help-info">
+                <h2>Managing Watch List</h2>
+                <p>To manage your watch lists, use the <a href="watchList.html">WatchList</a> button on the navigation menu. From there, you can add movies to either 'Watching', 'Completed', 'Dropped' or 'Plan to Watch' categories, remove, or mark movies as watched.</p>
+            </div>
+            <div class="help-info">
+                <h2>Creating an account</h2>
+                <p>In order to use the WatchList feature you will need to create an account.</p>
+                <p>You can easily do this by visiting on the <a href="login.html">Login</a> page, where you can be redirected to the Sign in page if you don't already have an account.</p>
+            </div>
+            <div class="help-info">
+                <h2>More about us</h2>
+                <p>You can find more information about the mission of this web site in the <a href="index.html#about-section">About</a> section.</p>
             </div>
         </div>
         <div class="dropdown_menu">
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="index.html#about-section">About</a></li>
-                <li><a href="watchList.html" class="active">WatchList</a></li>
+                <li><a href="watchList.html">WatchList</a></li>
                 <li><a href="explore.html">Explore</a></li>
-                <li><a href="watchList.html">Help</a></li>
+                <li><a href="help.html" class="active">Help</a></li>
                 <li><a href="login.html">Login</a></li>
             </ul>
         </div>
     </section>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const watchListLinks = document.querySelectorAll('.list-bar ul li a');
-            const loginMessage = document.getElementById('login-message');
-            function handleWatchListClick(event) {
-                event.preventDefault();
-                watchListLinks.forEach(link => {
-                    link.classList.remove('active');
-                });
-                this.classList.add('active');
-            }
-            watchListLinks.forEach(link => {
-                link.addEventListener('click', handleWatchListClick);
-            });
-        });
-    
         const toggleBtn = document.querySelector('.toggle_btn')
         const toggleBtnIcon = document.querySelector('.toggle_btn i')
         const dropDownMenu = document.querySelector('.dropdown_menu')
@@ -84,6 +73,5 @@
             toggleBtnIcon.classList = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
         }
     </script>
-    
 </body>
 </html>

@@ -35,6 +35,9 @@ header ul {
     justify-content: center;
     align-items: center;
 }
+.dropdown_menu ul {
+    margin-top: 10px;
+}
 .navbar ul li,
 .dropdown_menu li {
     list-style: none;
@@ -78,7 +81,6 @@ header ul {
     height: 240px;
 }
 .dropdown_menu li{
-    padding: 0.7 rem;
     display: flex;
     align-items:center;
     justify-content: center;
@@ -120,7 +122,6 @@ header ul {
 }
 
 .bucket {
-    size: cover;
     position: relative;
     bottom: 0;
     top: 200px;
