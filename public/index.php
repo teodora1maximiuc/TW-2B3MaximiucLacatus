@@ -1,10 +1,4 @@
 <?php
-// index.php
-
-// Include necessary PHP files and configurations
-//include 'config.php';
-
-// Simple routing logic based on query parameter 'page'
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
 switch ($page) {
