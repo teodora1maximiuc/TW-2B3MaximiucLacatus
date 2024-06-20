@@ -1,5 +1,5 @@
 <?php
-
+define('BASE_URL', 'http://localhost/TW-2B3MaximiucLacatus/');
 $host = 'sql7.freesqldatabase.com';
 $db = 'sql7714801';
 $user = 'sql7714801';

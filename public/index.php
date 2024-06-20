@@ -3,7 +3,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
 switch ($page) {
     case 'home':
-        include 'index.html';
+        include 'src\views\html\index.html';
         break;
     case 'about':
         header('Location: index.php?page=home#about-section');

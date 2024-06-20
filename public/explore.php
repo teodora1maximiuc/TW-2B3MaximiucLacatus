@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +26,11 @@
                 <li><a href="watchList.html">WatchList</a></li>
                 <li><a href="explore.html" class="active">Explore</a></li>
                 <li><a href="help.html">Help</a></li>
-                <li><a href="login.html">Login</a></li>
+                <?php if(!isset($_SESSION['user_id'])) : ?> 
+                    <li><a href="login.php">Login</a></li>
+                <?php else : ?>
+                    <li><a href="../src/controllers/Users.php">Logout</a></li>
+                <?php endif; ?>
             </ul>
             <div class="toggle_btn">
                 <i class="fa-solid fa-bars" style="color: #fff;"></i>
