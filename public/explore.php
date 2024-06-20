@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>FilmQuest</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="explore.css">
+    <link rel="stylesheet" type="text/css" href="css/explore.css">
     <link rel="icon" href="images/tab_logo.png" type="image/x-icon">
 </head>
 <body>
@@ -90,7 +90,46 @@
             </div>
         </div>
         <div class="movies-grid" id="movies-grid">
-            <!-- Movie cards will be inserted here by JavaScript -->
+        <?php
+$apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+$page = 1; // Start with page 1
+$totalPages = 5; // Set the total number of pages you want to fetch (adjust as needed)
+$moviesPerPage = 20; // Number of movies per page
+
+for ($page = 1; $page <= $totalPages; $page++) {
+    $url = 'https://api.themoviedb.org/3/discover/movie?api_key=' . $apiKey . '&page=' . $page;
+    $response = file_get_contents($url);
+    $data = json_decode($response, true);
+
+    if (isset($data['results'])) {
+        foreach ($data['results'] as $movie) {
+            $title = $movie['title'];
+            $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
+            $genre = ''; // You can fetch genre information if needed
+            $releaseYear = date('Y', strtotime($movie['release_date']));
+            $rating = $movie['vote_average'];
+
+            echo '<div class="movie-card">';
+            echo '<div class="card-head">';
+            echo '<img src="' . $posterPath . '" alt="' . $title . '" class="card-img">';
+            echo '<div class="card-overlay">';
+            echo '<div class="bookmark"><i class="fa-regular fa-bookmark" style="color: #fff;"></i></div>';
+            echo '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' . $rating . '</span></div>';
+            echo '<div class="addWatchList"><i class="fa-solid fa-circle-plus" style="color: #fff;"></i></div>';
+            echo '</div></div>';
+            echo '<div class="card-body">';
+            echo '<h3 class="card-title">' . $title . '</h3>';
+            echo '<div class="card-info"><span class="genre">' . $genre . ' - </span><span class="year">' . $releaseYear . '</span></div>';
+            echo '</div></div>';
+        }
+    } else {
+        echo '<p>No movies found</p>';
+    }
+
+    // Delay before making the next API request to avoid rate limiting (optional)
+    usleep(500000); // Sleep for 0.5 seconds
+}
+?>
         </div>
     </section>
     <section class="statistic">
@@ -104,44 +143,6 @@
     </section>
 </section>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('fetch_movies.php')
-        .then(response => response.json())
-        .then(data => {
-            const moviesGrid = document.getElementById('movies-grid');
-            data.forEach(movie => {
-                const movieCard = document.createElement('div');
-                movieCard.classList.add('movie-card');
-                movieCard.innerHTML = `
-                    <div class="card-head">
-                        <img src="${movie.image}" alt="${movie.title}" class="card-img">
-                        <div class="card-overlay">
-                            <div class="bookmark">
-                                <i class="fa-regular fa-bookmark" style="color: #fff;"></i>
-                            </div>
-                            <div class="rating">
-                                <i class="fa-solid fa-star" style="color: #f9cc6c;"></i>
-                                <span>${movie.rating}</span>
-                            </div>
-                            <div class="addWatchList">
-                                <i class="fa-solid fa-circle-plus" style="color: #fff;"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">${movie.title}</h3>
-                        <div class="card-info">
-                            <span class="genre">${movie.genre} - </span>
-                            <span class="year"> ${movie.release_year}</span>
-                        </div>
-                    </div>
-                `;
-                moviesGrid.appendChild(movieCard);
-            });
-        })
-        .catch(error => console.error('Error fetching movies:', error));
-});
-
 const toggleBtn = document.querySelector('.toggle_btn');
 const toggleBtnIcon = document.querySelector('.toggle_btn i');
 const dropDownMenu = document.querySelector('.dropdown_menu');

@@ -1,10 +1,9 @@
 <?php
-// config.php
 
-$host = 'localhost';
-$db = 'your_database_name';
-$user = 'your_database_user';
-$pass = 'your_database_password';
+$host = 'sql7.freesqldatabase.com';
+$db = 'sql7714801';
+$user = 'sql7714801';
+$pass = 'Rp7WnGbdeH';
 
 $dsn = "mysql:host=$host;dbname=$db";
 $options = [

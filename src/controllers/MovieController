@@ -1,0 +1,14 @@
+<?php
+require_once '../config/config.php';
+require_once __DIR__ . '/../models/Movie.php';
+
+class MovieController {
+    private $movieModel;
+    public function __construct($pdo) {
+        $this->movieModel = new Movie($pdo);
+    }
+    public function fetchMovies() {
+        return $this->movieModel->getAllMovies();
+    }
+}
+?>
