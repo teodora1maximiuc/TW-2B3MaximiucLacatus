@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="css/explore.css">
     <link rel="icon" href="images/tab_logo.png" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <section class="section1">
@@ -59,79 +60,85 @@
     <section class="movies">
         <div class="filter-bar">
             <div class="filter-dropdowns">
-                <select name="genre" class="genre">
-                   <option value="all genres">All genres</option>
-                    <option value="action">Action</option>
-                    <option value="adventure">Adventure</option>
-                    <option value="animal">Animal</option>
-                    <option value="romance">Romance</option>
-                    <option value="fantasy">Fantasy</option>
-                    <option value="sci-fi">Sci-fi</option>
-                </select>
-                <select name="year" class="year">
-                    <option value="all years">All the years</option>
-                    <option value="2024">2024</option>
-                    <option value="2020-2023">2020-2023</option>
-                    <option value="2010-2019">2010-2019</option>
-                    <option value="2000-2009">2000-2009</option>
-                    <option value="1990-1999">1990-1999</option>
-                </select>
-            </div>
-            <div class="search-bar">
-                <input type="text" class="input" placeholder="Search...">
-            </div>
-            <div class="filter-radios">
-                <input type="radio" name="grade" id="popular" checked>
-                <label for="popular">Popular</label>
-
-                <input type="radio" name="grade" id="newest">
-                <label for="newest">Newest</label>
-                <div class="checked-radio-bg"></div>
+                <form action="" method="get" id="filter-form">
+                    <select name="genre" class="genre">
+                        <option value="all genres">All genres</option>
+                        <option value="28">Action</option>
+                        <option value="12">Adventure</option>
+                        <option value="16">Animation</option>
+                        <option value="35">Comedy</option>
+                        <option value="80">Crime</option>
+                        <option value="80">Documentary</option>
+                        <option value="80">Drama</option>
+                        <option value="80">Fantasy</option>
+                        <option value="80">Romance</option>
+                    </select>
+                    <select name="year" class="year">
+                        <option value="all years">All years</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2022">2021</option>
+                        <option value="2022">2020</option>
+                        <option value="2022">2019</option>
+                        <option value="2022">2018</option>
+                        <option value="2022">2017</option>
+                    </select>
+                    <button type="submit">Apply Filters</button>
+                </form>
             </div>
         </div>
         <div class="movies-grid" id="movies-grid">
-        <?php
-$apiKey = '0136e68e78a0433f8b5bdcec484af43c';
-$page = 1; // Start with page 1
-$totalPages = 5; // Set the total number of pages you want to fetch (adjust as needed)
-$moviesPerPage = 20; // Number of movies per page
+            <?php
+            $apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+            $genre = isset($_GET['genre']) ? $_GET['genre'] : 'all genres';
+            $year = isset($_GET['year']) ? $_GET['year'] : 'all years';
+            $grade = isset($_GET['grade']) ? $_GET['grade'] : 'popular';
+            $url = 'https://api.themoviedb.org/3/discover/movie?api_key=' . $apiKey;
 
-for ($page = 1; $page <= $totalPages; $page++) {
-    $url = 'https://api.themoviedb.org/3/discover/movie?api_key=' . $apiKey . '&page=' . $page;
-    $response = file_get_contents($url);
-    $data = json_decode($response, true);
+            if ($genre !== 'all genres') {
+                $url .= '&with_genres=' . urlencode($genre);
+            }
 
-    if (isset($data['results'])) {
-        foreach ($data['results'] as $movie) {
-            $title = $movie['title'];
-            $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
-            $genre = ''; // You can fetch genre information if needed
-            $releaseYear = date('Y', strtotime($movie['release_date']));
-            $rating = $movie['vote_average'];
+            if ($year !== 'all years') {
+                $url .= '&primary_release_year=' . $year;
+            }
 
-            echo '<div class="movie-card">';
-            echo '<div class="card-head">';
-            echo '<img src="' . $posterPath . '" alt="' . $title . '" class="card-img">';
-            echo '<div class="card-overlay">';
-            echo '<div class="bookmark"><i class="fa-regular fa-bookmark" style="color: #fff;"></i></div>';
-            echo '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' . $rating . '</span></div>';
-            echo '<div class="addWatchList"><i class="fa-solid fa-circle-plus" style="color: #fff;"></i></div>';
-            echo '</div></div>';
-            echo '<div class="card-body">';
-            echo '<h3 class="card-title">' . $title . '</h3>';
-            echo '<div class="card-info"><span class="genre">' . $genre . ' - </span><span class="year">' . $releaseYear . '</span></div>';
-            echo '</div></div>';
-        }
-    } else {
-        echo '<p>No movies found</p>';
-    }
+            if ($grade === 'newest') {
+                $url .= '&sort_by=release_date.desc';
+            } else {
+                $url .= '&sort_by=popularity.desc';
+            }
+            $response = file_get_contents($url);
+            $data = json_decode($response, true);
+            if (isset($data['results'])) {
+                foreach ($data['results'] as $movie) {
+                    $title = $movie['title'];
+                    $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
+                    $releaseYear = date('Y', strtotime($movie['release_date']));
+                    $rating = $movie['vote_average'];
 
-    // Delay before making the next API request to avoid rate limiting (optional)
-    usleep(500000); // Sleep for 0.5 seconds
-}
-?>
+                    echo '<div class="movie-card">';
+                    echo '<div class="card-head">';
+                    echo '<img src="' . $posterPath . '" alt="' . $title . '" class="card-img">';
+                    echo '<div class="card-overlay">';
+                    echo '<div class="bookmark"><i class="fa-regular fa-bookmark" style="color: #fff;"></i></div>';
+                    echo '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' . $rating . '</span></div>';
+                    echo '<div class="addWatchList"><i class="fa-solid fa-circle-plus" style="color: #fff;"></i></div>';
+                    echo '</div></div>';
+                    echo '<div class="card-body">';
+                    echo '<h3 class="card-title">' . $title . '</h3>';
+                    echo '<div class="card-info"><span class="genre">' . $genre . ' - </span><span class="year">' . $releaseYear . '</span></div>';
+                    echo '</div></div>';
+                }
+            } else {
+                echo '<p>No movies found</p>';
+            }
+            ?>
         </div>
+        <button id="see-more-btn">See More</button>
     </section>
+
     <section class="statistic">
         <div class="statistics">
             <h2>Statistics</h2>
@@ -143,17 +150,72 @@ for ($page = 1; $page <= $totalPages; $page++) {
     </section>
 </section>
 <script>
-const toggleBtn = document.querySelector('.toggle_btn');
-const toggleBtnIcon = document.querySelector('.toggle_btn i');
-const dropDownMenu = document.querySelector('.dropdown_menu');
+$(document).ready(function() {
+    let currentPage = 1;
+    const totalPages = 10;
 
-toggleBtn.onclick = function() {
-    dropDownMenu.classList.toggle('open');
-    const isOpen = dropDownMenu.classList.contains('open');
-    toggleBtnIcon.classList = isOpen
-        ? 'fa-solid fa-xmark'
-        : 'fa-solid fa-bars';
-};
+    function fetchMovies(page) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const genre = urlParams.get('genre'); 
+        const year = urlParams.get('year'); 
+
+        let apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=<?= $apiKey ?>&page=' + page;
+
+        if (genre && genre !== 'all genres') {
+            apiUrl += '&with_genres=' + encodeURIComponent(genre);
+        }
+        if (year && year !== 'all years') {
+            if (year.includes('-')) {
+                const [startYear, endYear] = year.split('-');
+                apiUrl += '&primary_release_date.gte=' + startYear + '-01-01';
+                apiUrl += '&primary_release_date.lte=' + endYear + '-12-31';
+            } else {
+                apiUrl += '&primary_release_year=' + year;
+            }
+        }
+
+        $.get(apiUrl, function(data) {
+            let moviesHtml = '';
+            if (data.results.length > 0) {
+                data.results.forEach(function(movie) {
+                    const title = movie.title;
+                    const posterPath = 'https://image.tmdb.org/t/p/w500/' + movie.poster_path;
+                    const releaseYear = new Date(movie.release_date).getFullYear();
+                    const rating = movie.vote_average;
+
+                    moviesHtml += '<div class="movie-card">';
+                    moviesHtml += '<div class="card-head">';
+                    moviesHtml += '<img src="' + posterPath + '" alt="' + title + '" class="card-img">';
+                    moviesHtml += '<div class="card-overlay">';
+                    moviesHtml += '<div class="bookmark"><i class="fa-regular fa-bookmark" style="color: #fff;"></i></div>';
+                    moviesHtml += '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' + rating + '</span></div>';
+                    moviesHtml += '<div class="addWatchList"><i class="fa-solid fa-circle-plus" style="color: #fff;"></i></div>';
+                    moviesHtml += '</div></div>';
+                    moviesHtml += '<div class="card-body">';
+                    moviesHtml += '<h3 class="card-title">' + title + '</h3>';
+                    moviesHtml += '<div class="card-info"><span class="genre">' + genre + ' - </span><span class="year">' + releaseYear + '</span></div>';
+                    moviesHtml += '</div></div>';
+                });
+                $('.movies-grid').append(moviesHtml);
+            } else {
+                $('.movies-grid').append('<p>No more movies found</p>');
+            }
+        });
+    }
+    $('#apply-filters-btn').on('click', function() {
+        $('.movies-grid').html('');
+        fetchMovies(1);
+        currentPage = 1; 
+    });
+    $('#see-more-btn').on('click', function() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchMovies(currentPage); 
+        } else {
+            alert('No more pages to load');
+        }
+    });
+});
 </script>
 </body>
 </html>
