@@ -1,6 +1,6 @@
 <?php
-include_once __DIR__ . '/../src/helpers/session_helper.php';
-include_once __DIR__ . '/../config/config.php';
+include_once __DIR__ . '/../../src/helpers/session_helper.php';
+include_once __DIR__ . '/../../config/config.php';
 
 if (isset($_GET['id'])) {
     $userId = intval($_GET['id']);
@@ -10,7 +10,7 @@ if (isset($_GET['id'])) {
     $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        header('Location: view_users.php');
+        redirect(BASE_URL . 'public/user_management.php');
         exit();
     } else {
         echo "Error: Unable to remove user.";

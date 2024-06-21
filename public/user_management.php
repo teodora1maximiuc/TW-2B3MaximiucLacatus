@@ -87,8 +87,8 @@
                             <td><?php echo htmlspecialchars($user['email']); ?></td>
                             <td><?php echo $user['is_admin'] ? 'Admin' : 'User'; ?></td>
                             <td>
-                                <a href="remove_user.php?id=<?php echo $user['id']; ?>" class="button">Remove</a>
-                                <a href="change_permissions.php?id=<?php echo $user['id']; ?>" class="button">Change Permissions</a>
+                                <a href="../src/views/remove_user.php?id=<?php echo $user['id']; ?>" class="button">Remove</a>
+                                <a href="../src/views/change_permissions.php?id=<?php echo $user['id']; ?>" class="button">Change Permissions</a>
                                 <a href="view_watchlist.php?id=<?php echo $user['id']; ?>" class="button">View Watchlist</a>
                             </td>
                         </tr>
