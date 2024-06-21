@@ -21,11 +21,11 @@ session_start();
                 <img src="images/logo.png" alt="FilmQuest Logo" class="logo-img">
             </a>
             <ul class="links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#about-section">About</a></li>
-                <li><a href="watchList.html">WatchList</a></li>
-                <li><a href="explore.html" class="active">Explore</a></li>
-                <li><a href="help.html">Help</a></li>
+                <li><a href="../src/views/html/index.html">Home</a></li>
+                <li><a href="../src/views/html/index.html#about-section">About</a></li>
+                <li><a href="../src/views/html/watchList.html">WatchList</a></li>
+                <li><a href="explore.php" class="active">Explore</a></li>
+                <li><a href="../src/views/html/help.html">Help</a></li>
                 <?php if(!isset($_SESSION['user_id'])) : ?> 
                     <li><a href="login.php">Login</a></li>
                 <?php else : ?>
@@ -137,7 +137,7 @@ session_start();
                     echo '</div></div>';
                     echo '<div class="card-body">';
                     echo '<h3 class="card-title">' . $title . '</h3>';
-                    echo '<div class="card-info"><span class="genre">' . $genre . ' - </span><span class="year">' . $releaseYear . '</span></div>';
+                    echo '<div class="card-info"></span><span class="year">' . $releaseYear . '</span></div>';
                     echo '</div></div>';
                 }
             } else {
@@ -148,7 +148,7 @@ session_start();
         <button id="see-more-btn">See More</button>
     </section>
 
-    <section class="statistic">
+    <!-- <section class="statistic">
         <div class="statistics">
             <h2>Statistics</h2>
         </div>
@@ -156,7 +156,7 @@ session_start();
             <img src="images/statistics-films.png" alt="" class="film-stat">
             <img src="images/actors-statistics.jpg" alt="" class="actor-stat">
         </div>
-    </section>
+    </section> -->
 </section>
 <script>
 $(document).ready(function() {
@@ -202,7 +202,7 @@ $(document).ready(function() {
                     moviesHtml += '</div></div>';
                     moviesHtml += '<div class="card-body">';
                     moviesHtml += '<h3 class="card-title">' + title + '</h3>';
-                    moviesHtml += '<div class="card-info"><span class="genre">' + genre + ' - </span><span class="year">' + releaseYear + '</span></div>';
+                    moviesHtml += '<div class="card-info"></span><span class="year">' + releaseYear + '</span></div>';
                     moviesHtml += '</div></div>';
                 });
                 $('.movies-grid').append(moviesHtml);
