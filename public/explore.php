@@ -111,6 +111,9 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
                     <input type="text" class="input" placeholder="Search...">
                 </div>
             </div>
+            <div class="search">
+                <input type="text" class="input" placeholder="Search...">
+            </div>
         </div>
         <div class="movies-grid" id="movies-grid">
             <?php
