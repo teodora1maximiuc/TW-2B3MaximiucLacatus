@@ -20,8 +20,8 @@ class User{
     }
 
     public function register($data){
-        try{
-            $stmt = $this->pdo->prepare('INSERT INTO users (first_name, last_name, email, username, pwd) VALUES(:first_name, :last_name, :email, :username, :pwd)');
+        try {
+            $stmt = $this->pdo->prepare('INSERT INTO users (first_name, last_name, email, username, pwd, is_admin) VALUES(:first_name, :last_name, :email, :username, :pwd, :is_admin)');
             $stmt->execute([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -30,10 +30,14 @@ class User{
                 'pwd' => $data['pwd'],
                 'is_admin' => $data['is_admin'] ?? 0
             ]);
-
-            return $stmt->rowCount() > 0;
-        } catch(PDOException $e){
-            error_log($e->getMessage()); 
+    
+            if ($stmt->rowCount() > 0) {
+                return true;  // Registration successful
+            } else {
+                return false; // No rows affected; registration failed
+            }
+        } catch(PDOException $e) {
+            error_log('Registration Error: ' . $e->getMessage()); 
             return false;
         }
     }
