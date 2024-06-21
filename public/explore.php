@@ -99,17 +99,28 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
+<<<<<<< Updated upstream
                         <option value="2021">2021</option>
                         <option value="2020-2017">2020-2017</option>
                         <option value="2016-2010">2016-2010</option>
                         <option value="2009-2000">2009-2000</option>
                         <option value="2000-1990">2000-1990</option>
+=======
+                        <option value="2022">2021</option>
+                        <option value="2022">2020-2017</option>
+                        <option value="2022">2016-2010</option>
+                        <option value="2022">2010-2000</option>
+                        <option value="2022">2000-1990</option>
+>>>>>>> Stashed changes
                     </select>
                     <button type="submit">Apply Filters</button>
                 </form>
                 <div class="search">
                     <input type="text" class="input" placeholder="Search...">
                 </div>
+            </div>
+            <div class="search">
+                <input type="text" class="input" placeholder="Search...">
             </div>
         </div>
         <div class="movies-grid" id="movies-grid">
