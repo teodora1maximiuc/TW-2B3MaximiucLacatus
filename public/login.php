@@ -57,12 +57,12 @@
                     <img src="images/logo.png" alt="FilmQuest Logo" class="logo-img">
                 </a>
                 <ul class="links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html#about-section">About</a></li>
-                    <li><a href="watchList.html">WatchList</a></li>
-                    <li><a href="explore.html">Explore</a></li>
-                    <li><a href="help.html">Help</a></li>
-                    <li><a href="login.html" class="active">Login</a></li>
+                    <li><a href="home.php">Home</a></li>
+                    <li><a href="home.php#about-section">About</a></li>
+                    <li><a href="watchList.php">WatchList</a></li>
+                    <li><a href="explore.php">Explore</a></li>
+                    <li><a href="help.php">Help</a></li>
+                    <li><a href="login.php" class="active">Login</a></li>
                 </ul>
                 <div class="toggle_btn">
                     <i class="fa-solid fa-bars" style="color: #fff;"></i>
@@ -71,12 +71,12 @@
         </header>
         <div class="dropdown_menu">
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="index.html">About</a></li>
-                <li><a href="watchList.html">WatchList</a></li>
-                <li><a href="explore.html">Explore</a></li>
-                <li><a href="help.html">Help</a></li>
-                <li><a href="login.html" class="active">Login</a></li>
+                <li><a href="home.php">Home</a></li>
+                <li><a href="home.php#about-section">About</a></li>
+                <li><a href="watchList.php">WatchList</a></li>
+                <li><a href="explore.php">Explore</a></li>
+                <li><a href="help.php">Help</a></li>
+                <li><a href="login.php" class="active">Login</a></li>
             </ul>
         </div>
         <div class="form-box">
@@ -169,6 +169,13 @@
                 toggleBtnIcon.classList = isOpen
                     ? 'fa-solid fa-xmark'
                     : 'fa-solid fa-bars';
+            };
+            window.onload = function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('form') === 'register') {
+                    document.getElementById('login').style.display = 'none';
+                    document.getElementById('register').style.display = 'block';
+                }
             };
         </script>
     </section>

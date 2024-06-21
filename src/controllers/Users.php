@@ -17,53 +17,67 @@ class Users {
     }
 
     public function register(){
-        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $data = [
             'first_name' => trim($_POST['first_name']),
             'last_name' => trim($_POST['last_name']),
             'email' => trim($_POST['email']),
             'username' => trim($_POST['username']),
-            'pwd' => trim($_POST['pwd'])
+            'pwd' => trim($_POST['pwd']),
+            'is_admin' => 0 
         ];
+
+        $errors = [];
+
         if(empty($data['first_name']) || empty($data['last_name']) ||empty($data['username']) || empty($data['email']) ||  empty($data['pwd'])){
             flash("register", "Please fill all the inputs");
-            redirect(BASE_URL . 'public/login.php');
+            redirect(BASE_URL . 'public/login.php?form=register');
+            //$errors[] = "Please fill all the inputs";
+            return;
         }
 
         if(!preg_match("/^[a-zA-Z]*$/", $data['first_name']) || !preg_match("/^[a-zA-Z]*$/", $data['last_name'])){
             flash("register", "Invalid characters");
-            redirect(BASE_URL . 'public/login.php');
+            redirect(BASE_URL . 'public/login.php?form=register');
+            //$errors[] = "Invalid characters";
+            return;
         }
 
         if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)){
             flash("register", "Invalid email");
-            redirect(BASE_URL . 'public/login.php');
+            redirect(BASE_URL . 'public/login.php?form=register');
+            //$errors[] = "Invalid email";
+            return;
         }
 
         if(strlen($data['pwd']) < 6){
             flash("register", "Password must be at least 6 characters");
-            redirect(BASE_URL . 'public/login.php');
+            redirect(BASE_URL . 'public/login.php?form=register');
+            //$errors[] = "Password must be at least 6 characters";
+            return;
         }
 
         if($this->userModel->findUserByEmailOrUsername($data['email'], $data['username'])){
             flash("register", "Email or username already taken");
-            redirect(BASE_URL . 'public/login.php');
+            redirect(BASE_URL . 'public/login.php?form=register');
+            //$errors[] = "Email or username already taken";
+            return;
         }
 
         //hash password
         $data['pwd'] = password_hash($data['pwd'], PASSWORD_DEFAULT);
 
         if($this->userModel->register($data)){
-            flash("register", "You are registered and can log in");
+            flash("login", "You are registered and can log in", 'form-message form-message-green');
             redirect(BASE_URL . 'public/login.php');
         }else{
             flash("register", "Something went wrong");
-            redirect(BASE_URL . 'public/login.php');
+            redirect(BASE_URL . 'public/login.php?form=register');
         }
     }
 
     public function login(){
-        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $data = [
             'username_email' => trim($_POST['username_email']),
             'pwd' => trim($_POST['pwd'])
@@ -72,7 +86,6 @@ class Users {
         if(empty($data['username_email']) || empty($data['pwd'])){
             flash("login", "Please fill all the inputs");
             redirect(BASE_URL . 'public/login.php');
-            //header("location: ../../public/login.php");
             exit();
         }
 
@@ -96,8 +109,8 @@ class Users {
         $_SESSION['user_id'] = $user->id;
         $_SESSION['username'] = $user->username;
         $_SESSION['email'] = $user->email;
-        //redirect('../../public/explore.php');
-        redirect(BASE_URL . 'public/explore.php');
+        $_SESSION['is_admin'] = $user->is_admin;
+        redirect(BASE_URL . 'public/home.php');
     }
 
     public function logout(){
@@ -106,7 +119,7 @@ class Users {
         unset($_SESSION['username']);
         unset($_SESSION['email']);
         session_destroy();
-        redirect(BASE_URL . 'public/login.php'); //index.php
+        redirect(BASE_URL . 'public/home.php'); 
     }
 }
 require_once '../../config/config.php';
@@ -128,7 +141,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $users->logout();
             break;
         default:
-            redirect('../../public/login.php'); //index.php
+            redirect(BASE_URL . 'public/login.php'); //index.php
+            
     }
 }
 

@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once __DIR__ . '/../src/helpers/session_helper.php';
 
 ?>
 
@@ -22,15 +23,18 @@ session_start();
             </a>
             <span class="title-responsive"> Explore </span>
             <ul class="links">
-                <li><a href="../src/views/html/index.html">Home</a></li>
-                <li><a href="../src/views/html/index.html#about-section">About</a></li>
-                <li><a href="../src/views/html/watchList.html">WatchList</a></li>
+                <li><a href="home.php">Home</a></li>
+                <li><a href="home.php#about-section">About</a></li>
+                <li><a href="watchList.php">WatchList</a></li>
                 <li><a href="explore.php" class="active">Explore</a></li>
-                <li><a href="../src/views/html/help.html">Help</a></li>
+                <li><a href="help.php">Help</a></li>
+                <?php if(isAdmin()) : ?>
+                    <li><a href="user_management.php">User Management</a></li>
+                <?php endif; ?>
                 <?php if(!isset($_SESSION['user_id'])) : ?> 
-                    <li><a href="login.php">Login</a></li>
+                <li><a href="login.php">Login</a></li>
                 <?php else : ?>
-                    <li><a href="../src/controllers/Users.php">Logout</a></li>
+                    <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
                 <?php endif; ?>
             </ul>
             <div class="toggle_btn">
@@ -40,12 +44,19 @@ session_start();
     </header>
     <div class="dropdown_menu">
         <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="index.html#about-section">About</a></li>
-            <li><a href="watchList.html">WatchList</a></li>
-            <li><a href="explore.html" class="active">Explore</a></li>
-            <li><a href="help.html">Help</a></li>
-            <li><a href="login.html">Login</a></li>
+            <li><a href="home.php">Home</a></li>
+            <li><a href="home.php#about-section">About</a></li>
+            <li><a href="watchList.php">WatchList</a></li>
+            <li><a href="explore.php" class="active">Explore</a></li>
+            <li><a href="help.php">Help</a></li>
+            <?php if(isAdmin()) : ?>
+                <li><a href="user_management.php">User Management</a></li>
+            <?php endif; ?>
+            <?php if(!isset($_SESSION['user_id'])) : ?> 
+            <li><a href="login.php">Login</a></li>
+            <?php else : ?>
+                <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
+            <?php endif; ?>
         </ul>
     </div>
     <section class="banner">
@@ -226,6 +237,18 @@ $(document).ready(function() {
         }
     });
 });
+
+const toggleBtn = document.querySelector('.toggle_btn');
+            const toggleBtnIcon = document.querySelector('.toggle_btn i');
+            const dropDownMenu = document.querySelector('.dropdown_menu');
+
+            toggleBtn.onclick = function() {
+                dropDownMenu.classList.toggle('open');
+                const isOpen = dropDownMenu.classList.contains('open');
+                toggleBtnIcon.classList = isOpen
+                    ? 'fa-solid fa-xmark'
+                    : 'fa-solid fa-bars';
+            };
 </script>
 </body>
 </html>

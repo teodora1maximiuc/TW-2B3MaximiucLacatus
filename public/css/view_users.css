@@ -3,18 +3,18 @@
     font-family: 'Lucky Bones';
     src: url('../../Luckybones-Bold.ttf') format('truetype'); 
 }
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins',sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 .section1 {
     min-height: 100vh;
-    background-image: url('/TW-2B3MaximiucLacatus/public/images/background.png');
+    background-color: #8a707e;
     background-size: cover;
+    background-repeat: repeat;
 }
-
 .navbar {
     position: fixed;
     top: -10px;
@@ -45,7 +45,7 @@ header ul {
     z-index: 1000;
 }
 .navbar ul li a,
-.dropdown_menu li a{
+.dropdown_menu li a {
     text-decoration: none;
     padding: 6px 15px;
     color: #fff;
@@ -53,7 +53,7 @@ header ul {
     z-index: 1001;
 }
 .navbar ul li a:hover, 
-.navbar ul li a.active{
+.navbar ul li a.active {
     background-color: #fff !important;
     color: #57648C !important;
 }
@@ -62,6 +62,7 @@ header ul {
     cursor: pointer;
     display: none;
 }
+/* DROPDOWN MENU */
 .dropdown_menu {
     display: none;
     position: fixed;
@@ -89,6 +90,7 @@ header ul {
     background-color: #fff !important;
     color: #57648C !important;
 }
+/* RESPONSIVE NAV BAR */
 @media(max-width: 992px) {
     .navbar .links {
         display: none;
@@ -99,6 +101,9 @@ header ul {
     .dropdown_menu {
         display: block;
     }
+    .popcorn {
+        display: none;
+    }
 }
 @media(max-width: 576px) {
     .dropdown_menu {
@@ -106,105 +111,82 @@ header ul {
         width: unset;
     }
 }
-.watch-list-nav .page-title {
-    font-size: 40px;
-    font-weight: bold;
-    color: #934A5F;
-    text-align: center;
-    margin: 20px 0;
-    position: fixed;
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    font-family: 'Lucky Bones';
-    text-shadow: -2px -2px 0 #e5e5e5, 2px -2px 0 #e5e5e5, -2px 2px 0 #e5e5e5, 2px 2px 0 #e5e5e5;
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #8a707e;
 }
 
-@media(max-width: 576px) {
-    .watch-list-nav .page-title {
-        font-size: 24px;
-    }
-}
-.watch-list-nav {
-    position: fixed;
-    top: 15%;
-    left: 0;
-    width: 100%;
-    padding: 0px 40px;
+.continut {
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 1000;
-    background-color: #e5e5e5;
-    padding: 10px 0;
+    justify-content: flex-start;
+    padding-top: 100px;
 }
 
-.watch-list-nav .page-title {
-    font-size: 40px;
-    font-weight: bold;
-    color: #934A5F;
-    text-align: center;
-    margin: 20px 0;
+.title h1 {
     font-family: 'Lucky Bones';
-    text-shadow: -2px -2px 0 #e5e5e5, 2px -2px 0 #e5e5e5, -2px 2px 0 #e5e5e5, 2px 2px 0 #e5e5e5;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+    text-align: left;
+    margin: 10px 0 20px 0;
+    position: relative;
+    left: 10%; /* Adjust this value to move the title more to the right */
 }
 
-.list-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5px;
-}
-
-.list-bar ul {
-    list-style: none;
-    display: flex;
-    padding: 0;
-}
-
-.list-bar li {
-    margin: 0 15px;
-}
-
-.list-bar a {
-    text-decoration: none;
-    color: black;
-    padding: 5px 10px;
-    border-radius: 5px;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.list-bar a.active,
-.list-bar a:hover {
-    border-bottom: 2px solid black !important;
-}
-
-.content {
-    background-color: #fff; 
-    padding: 20px; 
-    margin-top: 90px;
-}
-
-@media screen and (max-width: 576px) {
-    .list-bar a {
-        font-size: 0.8em; 
-        padding: 5px;
-        max-width: 100%; 
-        display: inline-block;
+@media(max-width: 576px) {
+    .title h1 {
+        font-family: 'Lucky Bones';
+        font-size: 24px;
+        left: 5%; /* Adjust this value for smaller screens */
     }
 }
-.not-logged-in {
+
+.container {
+    width: 80%;
+    background: #fff;
     padding: 20px;
-    margin-bottom: 20px;
+    border-radius: 10px;
+    margin-top: 10px; /* Reduce the margin to bring the table closer to the title */
 }
 
-.not-logged-in-content {
-    font-size: 1.1em;
-    text-align: center;
-    margin-top: 15%;
-    transform: translateY(100%);
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #57648C;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #57648C;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #47567B;
 }

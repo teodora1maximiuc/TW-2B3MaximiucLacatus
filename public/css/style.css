@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
 @font-face {
     font-family: 'Lucky Bones';
-    src: url('Luckybones-Bold.ttf') format('truetype'); 
+    src: url('../../Luckybones-Bold.ttf') format('truetype'); 
 }
 *{
     margin: 0;
@@ -11,7 +11,7 @@
 }
 .section1 {
     min-height: 100vh;
-    background-image: url('images/background.png');
+    background-image: url('/TW-2B3MaximiucLacatus/public/images/background.png');
     background-size: cover;
     background-repeat: no-repeat;
 }

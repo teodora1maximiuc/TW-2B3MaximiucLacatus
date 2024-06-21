@@ -13,7 +13,6 @@
     min-height: 100vh;
     background-image: url('/TW-2B3MaximiucLacatus/public/images/background.png');
     background-size: cover;
-    /*background-repeat: no-repeat;*/
 }
 .navbar {
     position: fixed;
@@ -206,3 +205,25 @@ header ul {
 .two label a:hover{
     text-decoration: underline;
 }
+
+.form-message {
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.form-message-red {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.form-message-green {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
