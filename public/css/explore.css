@@ -104,35 +104,6 @@ header ul {
     color: #57648C !important;
 }
 
-/* RESPONSIVE NAV BAR */
-@media (max-width: 992px) {
-    .navbar .links {
-        display: none;
-    }
-    .navbar .toggle_btn {
-        display: block;
-    }
-    .dropdown_menu {
-        display: block;
-    }
-}
-
-@media (max-width: 700px) {
-    .banner {
-        display: none;
-    }
-    .movies {
-        top: 100px;
-    }
-    .dropdown_menu {
-        left: 2rem;
-        width: unset;
-    }
-    .end {
-        height: 300px;
-    }
-}
-
 .banner {
     padding: 0 40px;
 }
@@ -173,11 +144,6 @@ header ul {
     display: flex;
     align-items: center;
     margin-right: 20px;
-}
-
-.card-title {
-    font-size: 3em;
-    text-shadow: 2px 0 2px #0007;
 }
 
 .movies {
@@ -332,14 +298,18 @@ header ul {
 }
 
 .movie-card .card-info {
-    color: #fff;
+    color: #2f2f2f;
     display: flex;
     font-size: 12px;
     font-weight: 500;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .movie-card .card-title {
-    color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #2f2f2f;
     font-size: 14px;
 }
 
@@ -447,8 +417,55 @@ header ul {
 .ending ul li a:hover {
     color: #934A5F;
 }
-@media (max-width: 1000px) {
+.title-responsive {
+    
+    font-size: 30px;
+    display: none;
+    color: white; 
+    left: 50%;
+    transform: translateX(-40%); 
+}
+
+/* Hide taste of things on tablets and mobiles */
+@media (max-width: 768px) {
+    .statistic {
+        display: none;
+    }
+}
+/* RESPONSIVE NAV BAR */
+@media (max-width: 992px) {
     .banner {
         display: none;
+    }
+    .title-responsive{
+        display: block;
+    }
+    .filter-bar {
+        padding-top: 0;
+    }
+    .movies {
+        top:130px;
+    }
+    .navbar .links {
+        display: none;
+    }
+    .navbar .toggle_btn {
+        display: block;
+    }
+    .dropdown_menu {
+        display: block;
+    }
+}
+
+@media (max-width: 700px) {
+    .movies {
+        top: 100px;
+    }
+    .dropdown_menu {
+        left: 2rem;
+        width: unset;
+    }
+    .end {
+        height: 300px;
     }
 }

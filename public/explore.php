@@ -20,6 +20,7 @@ session_start();
             <a href="#" class="logo">
                 <img src="images/logo.png" alt="FilmQuest Logo" class="logo-img">
             </a>
+            <span class="title-responsive"> Explore </span>
             <ul class="links">
                 <li><a href="../src/views/html/index.html">Home</a></li>
                 <li><a href="../src/views/html/index.html#about-section">About</a></li>
