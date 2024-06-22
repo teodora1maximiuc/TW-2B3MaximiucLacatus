@@ -292,7 +292,7 @@ $(document).ready(function() {
                     console.log(movieId);
 
                     moviesHtml += '<div class="movie-card" >';
-                    moviesHtml += 'div class="movie-id" style="display: none;">' + movieId + '</div>';
+                    moviesHtml += '<div class="movie-id" style="display: none;">' + movieId + '</div>';
                     moviesHtml += '<div class="card-head">';
                     moviesHtml += '<img src="' + posterPath + '" alt="' + title + '" class="card-img">';
                     moviesHtml += '<div class="card-overlay">';
@@ -393,7 +393,6 @@ $(document).ready(function() {
     function showModal(title, poster, year, description) {
         const modal = $('#movieModal');
         modal.find('.modal-content #modalTitle').text(title);
-        //modal.find('.modal-content #modalPoster').attr('src', poster);
         modal.find('.modal-content #modalYear').text(`Year: ${year}`);
         modal.find('.modal-content #modalDescription').text(description);
         modal.css('display', 'block');
@@ -408,7 +407,6 @@ $(document).ready(function() {
     // Event delegation for movie cards
     $(document).on('click', '.movie-card', function() {
         const movieTitle = $(this).find('.card-title').text(); // Get the title from clicked card
-        //const movieId = $(this).data('.movie-id'); // Get the movie ID from clicked card
         const movieId = $(this).find('.movie-id').text();
         fetchMovieDetailsByTitle(movieTitle, movieId);
     });
