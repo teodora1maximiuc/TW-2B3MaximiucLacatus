@@ -35,7 +35,6 @@ if (!empty($title)) {
 }
 
 if (!empty($actor)) {
-    // Search for actor by name
     $actorSearchUrl = 'https://api.themoviedb.org/3/search/person?api_key=' . $apiKey . '&query=' . urlencode($actor);
     $actorResponse = file_get_contents($actorSearchUrl);
     $actorData = json_decode($actorResponse, true);
@@ -60,6 +59,7 @@ $data = json_decode($response, true);
     <link rel="stylesheet" type="text/css" href="css/explore.css">
     <link rel="icon" href="images/tab_logo.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <section class="section1">
