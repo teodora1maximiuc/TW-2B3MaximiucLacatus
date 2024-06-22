@@ -207,6 +207,85 @@ $data = json_decode($response, true);
         <button id="see-more-btn">See More</button>
     </section>
 </section>
-<script src="js/explore.js"></script>
+<script>
+$(document).ready(function() {
+    let currentPage = 1;
+    const totalPages = 10;
+
+    function fetchMovies(page) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const genre = urlParams.get('genre'); 
+        const year = urlParams.get('year'); 
+
+        let apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=<?= $apiKey ?>&page=' + page;
+
+        if (genre && genre !== 'all genres') {
+            apiUrl += '&with_genres=' + encodeURIComponent(genre);
+        }
+        if (year && year !== 'all years') {
+            if (year.includes('-')) {
+                const [startYear, endYear] = year.split('-');
+                apiUrl += '&primary_release_date.gte=' + startYear + '-01-01';
+                apiUrl += '&primary_release_date.lte=' + endYear + '-12-31';
+            } else {
+                apiUrl += '&primary_release_year=' + year;
+            }
+        }
+
+        $.get(apiUrl, function(data) {
+            let moviesHtml = '';
+            if (data.results.length > 0) {
+                data.results.forEach(function(movie) {
+                    const title = movie.title;
+                    const posterPath = 'https://image.tmdb.org/t/p/w500/' + movie.poster_path;
+                    const releaseYear = new Date(movie.release_date).getFullYear();
+                    const rating = movie.vote_average;
+
+                    moviesHtml += '<div class="movie-card">';
+                    moviesHtml += '<div class="card-head">';
+                    moviesHtml += '<img src="' + posterPath + '" alt="' + title + '" class="card-img">';
+                    moviesHtml += '<div class="card-overlay">';
+                    moviesHtml += '<div class="bookmark"><i class="fa-regular fa-bookmark" style="color: #fff;"></i></div>';
+                    moviesHtml += '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' + rating + '</span></div>';
+                    moviesHtml += '<div class="addWatchList"><i class="fa-solid fa-circle-plus" style="color: #fff;"></i></div>';
+                    moviesHtml += '</div></div>';
+                    moviesHtml += '<div class="card-body">';
+                    moviesHtml += '<h3 class="card-title">' + title + '</h3>';
+                    moviesHtml += '<div class="card-info"></span><span class="year">' + releaseYear + '</span></div>';
+                    moviesHtml += '</div></div>';
+                });
+                $('.movies-grid').append(moviesHtml);
+            } else {
+                $('.movies-grid').append('<p>No more movies found</p>');
+            }
+        });
+    }
+    $('#apply-filters-btn').on('click', function() {
+        $('.movies-grid').html('');
+        fetchMovies(1);
+        currentPage = 1; 
+    });
+    $('#see-more-btn').on('click', function() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchMovies(currentPage); 
+        } else {
+            alert('No more pages to load');
+        }
+    });
+});
+
+const toggleBtn = document.querySelector('.toggle_btn');
+            const toggleBtnIcon = document.querySelector('.toggle_btn i');
+            const dropDownMenu = document.querySelector('.dropdown_menu');
+
+            toggleBtn.onclick = function() {
+                dropDownMenu.classList.toggle('open');
+                const isOpen = dropDownMenu.classList.contains('open');
+                toggleBtnIcon.classList = isOpen
+                    ? 'fa-solid fa-xmark'
+                    : 'fa-solid fa-bars';
+            };
+</script>
 </body>
 </html>
