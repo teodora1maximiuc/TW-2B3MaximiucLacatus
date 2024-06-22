@@ -172,6 +172,7 @@ $data = json_decode($response, true);
                     $rating = $movie['vote_average'];
 
                     echo '<div class="movie-card">';
+                    echo '<div class="movie-id" style="display: none;">' . $movieId . '</div>';
                     echo '<div class="card-head">';
                     echo '<img src="' . $posterPath . '" alt="' . $title . '" class="card-img">';
                     echo '<div class="card-overlay">';
@@ -189,8 +190,10 @@ $data = json_decode($response, true);
                     $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
                     $releaseYear = date('Y', strtotime($movie['release_date']));
                     $rating = $movie['vote_average'];
+                    $movieId = $movie['id'];
 
                     echo '<div class="movie-card">';
+                    echo '<div class="movie-id" style="display: none;">' . $movieId . '</div>';	
                     echo '<div class="card-head">';
                     echo '<img src="' . $posterPath . '" alt="' . $title . '" class="card-img">';
                     echo '<div class="card-overlay">';
@@ -210,7 +213,27 @@ $data = json_decode($response, true);
         <button id="see-more-btn">See More</button>
     </section>
 </section>
-<script>$(document).ready(function() {
+
+<div id="movieModal" class="modal">
+    <div class="modal-content">
+        <div class="trailer">
+            <iframe id="modalTrailer" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="modal-details">
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalYear"></p>
+                <p id="modalDescription"></p>
+            </div>
+        </div>
+        <span class="close">&times;</span>
+    </div>
+</div>
+
+
+
+<script>
+$(document).ready(function() {
     let currentPage = 1;
     let totalPages = 10;
 
@@ -265,8 +288,11 @@ $data = json_decode($response, true);
                     const posterPath = 'https://image.tmdb.org/t/p/w500/' + movie.poster_path;
                     const releaseYear = new Date(movie.release_date).getFullYear();
                     const rating = movie.vote_average;
+                    const movieId = movie.id;
+                    console.log(movieId);
 
-                    moviesHtml += '<div class="movie-card">';
+                    moviesHtml += '<div class="movie-card" >';
+                    moviesHtml += 'div class="movie-id" style="display: none;">' + movieId + '</div>';
                     moviesHtml += '<div class="card-head">';
                     moviesHtml += '<img src="' + posterPath + '" alt="' + title + '" class="card-img">';
                     moviesHtml += '<div class="card-overlay">';
@@ -327,6 +353,78 @@ $data = json_decode($response, true);
 
     // Initial fetch on page load
     fetchMovies(1, true);
+    function fetchMovieDetailsByTitle(movieTitle, movieId) {
+        const apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+        const apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=0136e68e78a0433f8b5bdcec484af43c' + '&query=' + encodeURIComponent(movieTitle);
+        const trailerUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=en-US`;
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: function(data) {
+                if (data.results.length > 0) {
+                    const movie = data.results[0];
+                    const title = movie.title;
+                    const poster = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+                    const year = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
+                    const description = movie.overview ? movie.overview : 'No description available';
+
+                    showModal(title, poster, year, description);
+
+                    $.get(trailerUrl, function(response) {
+                    if (response.results.length > 0) {
+                        const trailerKey = response.results[0].key;
+                        const trailerUrl = `https://www.youtube.com/embed/${trailerKey}`;
+
+                        $('#modalTrailer').attr('src', trailerUrl);
+                         }
+                    });
+                } else {
+                    alert('Movie details not found.');
+                }
+            },
+            error: function(err) {
+                console.error('Error fetching movie details:', err);
+                alert('Failed to fetch movie details. Please try again later.');
+            }
+        });
+    }
+
+    // Function to show modal with movie details
+    function showModal(title, poster, year, description) {
+        const modal = $('#movieModal');
+        modal.find('.modal-content #modalTitle').text(title);
+        //modal.find('.modal-content #modalPoster').attr('src', poster);
+        modal.find('.modal-content #modalYear').text(`Year: ${year}`);
+        modal.find('.modal-content #modalDescription').text(description);
+        modal.css('display', 'block');
+    }
+
+    // Close modal function
+    function closeModal() {
+        $('#movieModal').css('display', 'none');
+        $('#modalTrailer').attr('src', '');
+    }
+
+    // Event delegation for movie cards
+    $(document).on('click', '.movie-card', function() {
+        const movieTitle = $(this).find('.card-title').text(); // Get the title from clicked card
+        //const movieId = $(this).data('.movie-id'); // Get the movie ID from clicked card
+        const movieId = $(this).find('.movie-id').text();
+        fetchMovieDetailsByTitle(movieTitle, movieId);
+    });
+
+    // Close modal on close button click
+    $(document).on('click', '.modal .close', function() {
+        closeModal();
+    });
+
+    // Close modal when clicking outside of it
+    $(window).on('click', function(event) {
+        const modal = $('#movieModal');
+        if (event.target == modal[0]) {
+            closeModal();
+        }
+    });
 });
 
 const toggleBtn = document.querySelector('.toggle_btn');
