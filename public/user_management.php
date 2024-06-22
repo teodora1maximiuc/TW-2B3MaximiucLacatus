@@ -1,5 +1,6 @@
 
 <?php
+    session_start();
     include_once __DIR__ . '/../src/helpers/session_helper.php';
     include_once __DIR__ . '/../config/config.php';
     $query = "SELECT id, first_name, last_name, username, email, is_admin FROM users";
@@ -35,7 +36,7 @@
                     <li><a href="help.php">Help</a></li>
                     <li><a href="user_management.php" class="active">User Management</a></li>
                     <?php if(!isset($_SESSION['user_id'])) : ?> 
-                    <li><a href="login.php">Login</a></li>
+                        <li><a href="login.php">Login</a></li>
                     <?php else : ?>
                         <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
                     <?php endif; ?>

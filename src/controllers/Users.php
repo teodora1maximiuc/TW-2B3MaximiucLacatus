@@ -80,7 +80,8 @@ class Users {
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $data = [
             'username_email' => trim($_POST['username_email']),
-            'pwd' => trim($_POST['pwd'])
+            'pwd' => trim($_POST['pwd']),
+            'remember_me' => isset($_POST['remember_me']) ? true : false
         ];
 
         if(empty($data['username_email']) || empty($data['pwd'])){
@@ -92,7 +93,7 @@ class Users {
         if($this->userModel->findUserByEmailOrUsername($data['username_email'], $data['username_email'])){
             $loggedInUser = $this->userModel->login($data['username_email'], $data['pwd']);
             if($loggedInUser){
-                $this->createUserSession($loggedInUser);
+                $this->createUserSession($loggedInUser, $data['remember_me']);
             }else{
                 flash("login", "Password incorrect");
                 redirect(BASE_URL . 'public/login.php');
@@ -104,17 +105,37 @@ class Users {
         
     }
 
-    public function createUserSession($user){
-        session_start();
+    public function createUserSession($user, $rememberMe){
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         $_SESSION['user_id'] = $user->id;
         $_SESSION['username'] = $user->username;
         $_SESSION['email'] = $user->email;
         $_SESSION['is_admin'] = $user->is_admin;
+
+        if ($rememberMe) {
+            $token = bin2hex(random_bytes(16));
+            setcookie('remember_me', $token, time() + (48 * 60 * 60), '/');
+            $stmt = $this->pdo->prepare('INSERT INTO user_tokens (user_id, token) VALUES(:user_id, :token) ON DUPLICATE KEY UPDATE token = :new_token');
+            $stmt->execute(['user_id' => $user->id, 'token' => $token, 'new_token' => $token]);
+        } else {
+            setcookie('remember_me', '', time() - 3600, '/');
+        }
+
         redirect(BASE_URL . 'public/home.php');
     }
 
     public function logout(){
         session_start();
+
+        if (isset($_COOKIE['remember_me'])) {
+            $token = $_COOKIE['remember_me'];
+            $stmt = $this->pdo->prepare('DELETE FROM user_tokens WHERE token = :token');
+            $stmt->execute(['token' => $token]);
+            setcookie('remember_me', '', time() - 3600, '/');
+        }
+
         unset($_SESSION['user_id']);
         unset($_SESSION['username']);
         unset($_SESSION['email']);
@@ -141,7 +162,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $users->logout();
             break;
         default:
-            redirect(BASE_URL . 'public/login.php'); //index.php
+            redirect(BASE_URL . 'public/login.php');
             
     }
 }

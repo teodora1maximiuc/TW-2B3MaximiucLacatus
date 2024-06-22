@@ -101,7 +101,7 @@
                     </div>
                     <div class="two-col">
                         <div class="one">
-                            <input type="checkbox" id="login-check">
+                            <input type="checkbox" id="login-check" name="remember_me">
                             <label for="login-check"> Remember Me</label>
                         </div>
                     </div>
@@ -139,12 +139,6 @@
                     </div>
                     <div class="input-cont">
                         <input type="submit" class="submit" value="Sign up">
-                    </div>
-                    <div class="two-col">
-                        <div class="one">
-                            <input type="checkbox" id="register-remember">
-                            <label for="register-remember">Remember me</label>
-                        </div>
                     </div>
                 </form>
             </div>
