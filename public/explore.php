@@ -53,6 +53,7 @@ $data = json_decode($response, true);
 
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <head>
     <meta charset="UTF-8">
     <title>FilmQuest</title>
@@ -167,8 +168,9 @@ $data = json_decode($response, true);
                     $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
                     $releaseYear = date('Y', strtotime($movie['release_date']));
                     $rating = $movie['vote_average'];
+                    $movieId = $movie['id'];
 
-                    echo '<div class="movie-card">';
+                    echo '<div class="movie-card" data-movie-id="' . $movieId . '">';
                     echo '<div class="card-head">';
                     echo '<img src="' . $posterPath . '" alt="' . $title . '" class="card-img">';
                     echo '<div class="card-overlay">';
@@ -207,6 +209,18 @@ $data = json_decode($response, true);
         <button id="see-more-btn">See More</button>
     </section>
 </section>
+
+<div id="movieModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <img id="modalPoster" src="" alt="Movie Poster" class="modal-poster">
+        <h2 id="modalTitle"></h2>
+        <p id="modalYear"></p>
+        <p id="modalDescription"></p>
+    </div>
+</div>
+
+
 <script>
 $(document).ready(function() {
     let currentPage = 1;
@@ -273,11 +287,73 @@ $(document).ready(function() {
             alert('No more pages to load');
         }
     });
+
+    function fetchMovieDetailsByTitle(movieTitle) {
+        const apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+        const apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=0136e68e78a0433f8b5bdcec484af43c' + '&query=' + encodeURIComponent(movieTitle);
+
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: function(data) {
+                if (data.results.length > 0) {
+                    // Assuming we want details of the first result
+                    const movie = data.results[0];
+                    const title = movie.title;
+                    const poster = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+                    const year = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
+                    const description = movie.overview ? movie.overview : 'No description available';
+
+                    showModal(title, poster, year, description);
+                } else {
+                    alert('Movie details not found.');
+                }
+            },
+            error: function(err) {
+                console.error('Error fetching movie details:', err);
+                alert('Failed to fetch movie details. Please try again later.');
+            }
+        });
+    }
+
+    // Function to show modal with movie details
+    function showModal(title, poster, year, description) {
+        const modal = $('#movieModal');
+        modal.find('.modal-content #modalTitle').text(title);
+        modal.find('.modal-content #modalPoster').attr('src', poster);
+        modal.find('.modal-content #modalYear').text(`Year: ${year}`);
+        modal.find('.modal-content #modalDescription').text(description);
+        modal.css('display', 'block');
+    }
+
+    // Close modal function
+    function closeModal() {
+        $('#movieModal').css('display', 'none');
+    }
+
+    // Event delegation for movie cards
+    $(document).on('click', '.movie-card', function() {
+        const movieTitle = $(this).find('.card-title').text(); // Get the title from clicked card
+        fetchMovieDetailsByTitle(movieTitle);
+    });
+
+    // Close modal on close button click
+    $(document).on('click', '.modal .close', function() {
+        closeModal();
+    });
+
+    // Close modal when clicking outside of it
+    $(window).on('click', function(event) {
+        const modal = $('#movieModal');
+        if (event.target == modal[0]) {
+            closeModal();
+        }
+    });
 });
 
 const toggleBtn = document.querySelector('.toggle_btn');
-            const toggleBtnIcon = document.querySelector('.toggle_btn i');
-            const dropDownMenu = document.querySelector('.dropdown_menu');
+const toggleBtnIcon = document.querySelector('.toggle_btn i');
+const dropDownMenu = document.querySelector('.dropdown_menu');
 
             toggleBtn.onclick = function() {
                 dropDownMenu.classList.toggle('open');
@@ -286,6 +362,12 @@ const toggleBtn = document.querySelector('.toggle_btn');
                     ? 'fa-solid fa-xmark'
                     : 'fa-solid fa-bars';
             };
+
+
+
 </script>
+
+
+
 </body>
 </html>
