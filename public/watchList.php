@@ -70,7 +70,7 @@ if (!isset($_SESSION['user_id'])) {
                     <li><a href="login.php">Login</a></li>
                 </ul>
                 <div class="toggle_btn">
-                    <i class="fa-solid fa-bars" style="color: #fff;"></i>
+                    <button class="fa-solid fa-bars" style="color: #fff;"></>
                 </div>
             </div>
         </header>
@@ -216,7 +216,6 @@ $movies = getMoviesByCategory($user_id, $category);
             </div>
         </section>
     </section>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             const toggleBtn = document.querySelector('.toggle_btn');

@@ -152,7 +152,9 @@ $data = json_decode($response, true);
                         <option value="2009-2000" <?php echo ($year === '2009-2000') ? 'selected' : ''; ?>>2009-2000</option>
                         <option value="2000-1990" <?php echo ($year === '2000-1990') ? 'selected' : ''; ?>>2000-1990</option>
                     </select>
-                    <button type="submit" id="apply-filters-btn">Apply Filters</button>
+                    <div class="apply-filters-btn">
+                        <button class="button" onclick="applyFilters()">Apply Filters</button>
+                    </div>
                     </form>
                 </div>
                 <div class="search">
@@ -210,7 +212,9 @@ $data = json_decode($response, true);
             }
         ?>
         </div>
-        <button id="see-more-btn">See More</button>
+        <div class="see-more-btn">
+            <button id="seeMoreButton" class="seeMoreButton" onclick="loadMore()">See More</button>
+        </div>
     </section>
 </section>
 
@@ -224,13 +228,12 @@ $data = json_decode($response, true);
                 <h2 id="modalTitle"></h2>
                 <p id="modalYear"></p>
                 <p id="modalDescription"></p>
+                <a href="statistics.php">Statistic</a>
             </div>
         </div>
         <span class="close">&times;</span>
     </div>
 </div>
-
-
 
 <script>
 $(document).ready(function() {
@@ -314,9 +317,9 @@ $(document).ready(function() {
             }
             totalPages = data.total_pages || totalPages;
             if (currentPage >= totalPages) {
-                $('#see-more-btn').hide();
+                $('#seeMoreButton').hide();
             } else {
-                $('#see-more-btn').show();
+                $('#seeMoreButton').show();
             }
         });
     }
@@ -336,20 +339,15 @@ $(document).ready(function() {
         const newUrl = window.location.pathname + '?' + urlParams.toString();
         window.location.href = newUrl;
     }
-
-    $('#apply-filters-btn').on('click', function(e) {
-        e.preventDefault();
-        applyFilters();
-    });
-
-    $('#see-more-btn').on('click', function() {
+    $('#seeMoreButton').on('click', loadMore);
+    function loadMore() {
         if (currentPage < totalPages) {
             currentPage++;
             fetchMovies(currentPage);
         } else {
             alert('No more pages to load');
         }
-    });
+    }
 
     // Initial fetch on page load
     fetchMovies(1, true);

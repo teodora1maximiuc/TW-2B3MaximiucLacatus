@@ -92,7 +92,7 @@ header ul {
 .title-responsive {
     display: none;
     color: white; 
-    width: 100%;
+    width: auto;
     font-family: 'Lucky Bones';
     text-shadow: -2px -2px 0 #e5e5e5, 2px -2px 0 #e5e5e5, -2px 2px 0 #e5e5e5, 2px 2px 0 #e5e5e5;
     font-size: 40px;
@@ -200,7 +200,6 @@ header ul {
 }
 
 .movie-card {
-    
     background-color: #fff;
     border-radius: 15px;
     overflow: hidden;
