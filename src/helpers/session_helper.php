@@ -4,6 +4,28 @@ if(!isset($_SESSION)){
     session_start();
 }
 
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
+    $token = $_COOKIE['remember_me'];
+    require_once '../../config/config.php';
+    $stmt = $pdo->prepare('SELECT user_id FROM user_tokens WHERE token = :token');
+    $stmt->execute(['token' => $token]);
+    $userToken = $stmt->fetch(PDO::FETCH_OBJ);
+
+    if ($userToken) {
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE id = :id');
+        $stmt->execute(['id' => $userToken->user_id]);
+        $user = $stmt->fetch(PDO::FETCH_OBJ);
+
+        if ($user) {
+            $_SESSION['user_id'] = $user->id;
+            $_SESSION['username'] = $user->username;
+            $_SESSION['email'] = $user->email;
+            $_SESSION['is_admin'] = $user->is_admin;
+        }
+    }
+}
+
+
 function flash($name = '', $message = '', $class = 'form-message form-message-red'){
     if(!empty($name)){
         if(!empty($message) && empty($_SESSION[$name])){
