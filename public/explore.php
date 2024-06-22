@@ -1,7 +1,54 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include_once __DIR__ . '/../src/helpers/session_helper.php';
 
+$apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+$searchQuery = isset($_GET['query']) ? urlencode($_GET['query']) : '';
+$genre = isset($_GET['genre']) ? $_GET['genre'] : 'all genres';
+$year = isset($_GET['year']) ? $_GET['year'] : 'all years';
+$title = isset($_GET['title']) ? $_GET['title'] : '';
+$actor = isset($_GET['actor']) ? $_GET['actor'] : '';
+
+$url = 'https://api.themoviedb.org/3/discover/movie?api_key=' . $apiKey;
+
+if ($genre !== 'all genres') {
+    if (is_numeric($genre)) {
+        $url .= '&with_genres=' . urlencode($genre);
+    }
+}
+if ($year !== 'all years') {
+    if (strpos($year, '-') !== false) {
+        list($startYear, $endYear) = explode('-', $year);
+        $url .= '&primary_release_date.gte=' . $startYear . '-01-01';
+        $url .= '&primary_release_date.lte=' . $endYear . '-12-31';
+    } else {
+        $url .= '&primary_release_year=' . $year;
+    }
+}
+if (!empty($searchQuery)) {
+    $url .= '&query=' . $searchQuery;
+}
+if (!empty($title)) {
+    $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $apiKey . '&query=' . urlencode($title);
+}
+
+if (!empty($actor)) {
+    // Search for actor by name
+    $actorSearchUrl = 'https://api.themoviedb.org/3/search/person?api_key=' . $apiKey . '&query=' . urlencode($actor);
+    $actorResponse = file_get_contents($actorSearchUrl);
+    $actorData = json_decode($actorResponse, true);
+    
+    if (isset($actorData['results'][0]['id'])) {
+        $actorId = $actorData['results'][0]['id'];
+        // Fetch movies by actor ID
+        $url = 'https://api.themoviedb.org/3/person/' . $actorId . '/movie_credits?api_key=' . $apiKey;
+    }
+}
+
+$response = file_get_contents($url);
+$data = json_decode($response, true);
 ?>
 
 <!DOCTYPE html>
@@ -105,40 +152,35 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
                         <option value="2009-2000">2009-2000</option>
                         <option value="2000-1990">2000-1990</option>
                     </select>
+                    <input type="text" name="query" class="input" placeholder="Search...">
+                    <input type="text" name="actor" class="input" placeholder="Actor...">
                     <button type="submit">Apply Filters</button>
                 </form>
-                <div class="search">
-                    <input type="text" class="input" placeholder="Search...">
-                </div>
-            </div>
-            <div class="search">
-                <input type="text" class="input" placeholder="Search...">
             </div>
         </div>
         <div class="movies-grid" id="movies-grid">
-            <?php
-            $apiKey = '0136e68e78a0433f8b5bdcec484af43c';
-            $genre = isset($_GET['genre']) ? $_GET['genre'] : 'all genres';
-            $year = isset($_GET['year']) ? $_GET['year'] : 'all years';
-            $grade = isset($_GET['grade']) ? $_GET['grade'] : 'popular';
-            $url = 'https://api.themoviedb.org/3/discover/movie?api_key=' . $apiKey;
+        <?php
+            if (isset($data['cast']) && !empty($data['cast'])) {
+                // If searching by actor, use 'cast' array
+                foreach ($data['cast'] as $movie) {
+                    $title = $movie['title'];
+                    $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
+                    $releaseYear = date('Y', strtotime($movie['release_date']));
+                    $rating = $movie['vote_average'];
 
-            if ($genre !== 'all genres') {
-                $url .= '&with_genres=' . urlencode($genre);
-            }
-
-            if ($year !== 'all years') {
-                $url .= '&primary_release_year=' . $year;
-            }
-
-            if ($grade === 'newest') {
-                $url .= '&sort_by=release_date.desc';
-            } else {
-                $url .= '&sort_by=popularity.desc';
-            }
-            $response = file_get_contents($url);
-            $data = json_decode($response, true);
-            if (isset($data['results'])) {
+                    echo '<div class="movie-card">';
+                    echo '<div class="card-head">';
+                    echo '<img src="' . $posterPath . '" alt="' . $title . '" class="card-img">';
+                    echo '<div class="card-overlay">';
+                    echo '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' . $rating . '</span></div>';
+                    echo '<div class="addWatchList"><i class="fa-solid fa-info-circle" style="color: #fff;"></i></div>';
+                    echo '</div></div>';
+                    echo '<div class="card-body">';
+                    echo '<h3 class="card-title">' . $title . '</h3>';
+                    echo '<div class="card-info"><span class="year">' . $releaseYear . '</span></div>';
+                    echo '</div></div>';
+                }
+            } else if (isset($data['results']) && !empty($data['results'])) {
                 foreach ($data['results'] as $movie) {
                     $title = $movie['title'];
                     $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
@@ -154,106 +196,17 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
                     echo '</div></div>';
                     echo '<div class="card-body">';
                     echo '<h3 class="card-title">' . $title . '</h3>';
-                    echo '<div class="card-info"></span><span class="year">' . $releaseYear . '</span></div>';
+                    echo '<div class="card-info"><span class="year">' . $releaseYear . '</span></div>';
                     echo '</div></div>';
                 }
             } else {
                 echo '<p>No movies found</p>';
             }
-            ?>
+        ?>
         </div>
         <button id="see-more-btn">See More</button>
     </section>
-
-    <!-- <section class="statistic">
-        <div class="statistics">
-            <h2>Statistics</h2>
-        </div>
-        <div class="stat-images">
-            <img src="images/statistics-films.png" alt="" class="film-stat">
-            <img src="images/actors-statistics.jpg" alt="" class="actor-stat">
-        </div>
-    </section> -->
 </section>
-<script>
-$(document).ready(function() {
-    let currentPage = 1;
-    const totalPages = 10;
-
-    function fetchMovies(page) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const genre = urlParams.get('genre'); 
-        const year = urlParams.get('year'); 
-
-        let apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=<?= $apiKey ?>&page=' + page;
-
-        if (genre && genre !== 'all genres') {
-            apiUrl += '&with_genres=' + encodeURIComponent(genre);
-        }
-        if (year && year !== 'all years') {
-            if (year.includes('-')) {
-                const [startYear, endYear] = year.split('-');
-                apiUrl += '&primary_release_date.gte=' + startYear + '-01-01';
-                apiUrl += '&primary_release_date.lte=' + endYear + '-12-31';
-            } else {
-                apiUrl += '&primary_release_year=' + year;
-            }
-        }
-
-        $.get(apiUrl, function(data) {
-            let moviesHtml = '';
-            if (data.results.length > 0) {
-                data.results.forEach(function(movie) {
-                    const title = movie.title;
-                    const posterPath = 'https://image.tmdb.org/t/p/w500/' + movie.poster_path;
-                    const releaseYear = new Date(movie.release_date).getFullYear();
-                    const rating = movie.vote_average;
-
-                    moviesHtml += '<div class="movie-card">';
-                    moviesHtml += '<div class="card-head">';
-                    moviesHtml += '<img src="' + posterPath + '" alt="' + title + '" class="card-img">';
-                    moviesHtml += '<div class="card-overlay">';
-                    moviesHtml += '<div class="bookmark"><i class="fa-regular fa-bookmark" style="color: #fff;"></i></div>';
-                    moviesHtml += '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' + rating + '</span></div>';
-                    moviesHtml += '<div class="addWatchList"><i class="fa-solid fa-circle-plus" style="color: #fff;"></i></div>';
-                    moviesHtml += '</div></div>';
-                    moviesHtml += '<div class="card-body">';
-                    moviesHtml += '<h3 class="card-title">' + title + '</h3>';
-                    moviesHtml += '<div class="card-info"></span><span class="year">' + releaseYear + '</span></div>';
-                    moviesHtml += '</div></div>';
-                });
-                $('.movies-grid').append(moviesHtml);
-            } else {
-                $('.movies-grid').append('<p>No more movies found</p>');
-            }
-        });
-    }
-    $('#apply-filters-btn').on('click', function() {
-        $('.movies-grid').html('');
-        fetchMovies(1);
-        currentPage = 1; 
-    });
-    $('#see-more-btn').on('click', function() {
-        if (currentPage < totalPages) {
-            currentPage++;
-            fetchMovies(currentPage); 
-        } else {
-            alert('No more pages to load');
-        }
-    });
-});
-
-const toggleBtn = document.querySelector('.toggle_btn');
-            const toggleBtnIcon = document.querySelector('.toggle_btn i');
-            const dropDownMenu = document.querySelector('.dropdown_menu');
-
-            toggleBtn.onclick = function() {
-                dropDownMenu.classList.toggle('open');
-                const isOpen = dropDownMenu.classList.contains('open');
-                toggleBtnIcon.classList = isOpen
-                    ? 'fa-solid fa-xmark'
-                    : 'fa-solid fa-bars';
-            };
-</script>
+<script src="js/explore.js"></script>
 </body>
 </html>

@@ -60,19 +60,18 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
         <div class="title_search">
             <h2 id="text">FilmQuest</h2>
             <div class="search">
-                <input type="text" class="input" placeholder="Search...">
+                <input type="text" class="input" id="searchInput" placeholder="Search...">
+                <button onclick="performSearch()" class="search-btn">Search</button>
             </div>
             <div class="category">
                 <div class="select">
-                    <span class="selected">Search all</span>
+                    <span class="selected">Search by movie name</span>
                     <div class="caret"></div>
                 </div>
                 <ul class="categories">
-                    <li class="active">Search all</li>
-                    <li>Search by movie name</li>
-                    <li>Search by year</li>
-                    <li>Search by genre</li>
-                    <li>Search by actor</li>
+                    <li class="active" value="title">Search by movie name</li>
+                    <li value="year">Search by year</li>
+                    <li value="actor">Search by actor</li>
                 </ul>
             </div>
             <div id="about-section" class="about-section">
@@ -91,6 +90,23 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
             <img src="images/one_popcorn.png" class="popcorn" id="popcorn" alt="">
         </section>
         <script>
+            function performSearch() {
+                const selectedCategory = document.querySelector('.selected').innerText.toLowerCase();
+                const searchInput = document.getElementById('searchInput').value.trim();
+                let searchUrl = `explore.php?`;
+
+                if (selectedCategory.includes('movie name')) {
+                    searchUrl += `title=${encodeURIComponent(searchInput)}`;
+                } else if (selectedCategory.includes('year')) {
+                    searchUrl += `year=${encodeURIComponent(searchInput)}`;
+                } else if (selectedCategory.includes('actor')) {
+                    searchUrl += `actor=${encodeURIComponent(searchInput)}`;
+                } else {
+                    searchUrl += `title=${encodeURIComponent(searchInput)}`;
+                }
+
+                window.location.href = searchUrl;
+            }
             const popcorn = document.getElementById('popcorn');
 
             window.addEventListener('scroll', () => {
@@ -104,17 +120,17 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
 
                 popcorn.style.transform = `rotate(${rotation}deg)`;
             });
-            const toggleBtn = document.querySelector('.toggle_btn')
-            const toggleBtnIcon = document.querySelector('.toggle_btn i')
-            const dropDownMenu = document.querySelector('.dropdown_menu')
+
+            const toggleBtn = document.querySelector('.toggle_btn');
+            const toggleBtnIcon = document.querySelector('.toggle_btn i');
+            const dropDownMenu = document.querySelector('.dropdown_menu');
 
             toggleBtn.onclick = function() {
-                dropDownMenu.classList.toggle('open')
-                const isOpen = dropDownMenu.classList.contains('open')
-                toggleBtnIcon.classList = isOpen
-                ? 'fa-solid fa-xmark'
-                : 'fa-solid fa-bars'
-            }
+                dropDownMenu.classList.toggle('open');
+                const isOpen = dropDownMenu.classList.contains('open');
+                toggleBtnIcon.classList = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+            };
+
             const categories = document.querySelectorAll('.category');
             categories.forEach(category => {
                 const select = category.querySelector('.select');
@@ -128,6 +144,7 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
                     caret.classList.toggle('caret-rotate');
                     categoriesList.classList.toggle('categories-open');
                 });
+
                 options.forEach(option => {
                     option.addEventListener('click', () => {
                         selected.innerText = option.innerText;
@@ -142,6 +159,7 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
                 });
             });
         </script>
+
         </section>
         <section class = "end">
         </section>
