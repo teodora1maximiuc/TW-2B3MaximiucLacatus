@@ -130,32 +130,35 @@ $data = json_decode($response, true);
             <div class="filter-dropdowns">
                 <form action="" method="get" id="filter-form">
                     <select name="genre" class="genre">
-                        <option value="all genres">All genres</option>
-                        <option value="28">Action</option>
-                        <option value="12">Adventure</option>
-                        <option value="16">Animation</option>
-                        <option value="35">Comedy</option>
-                        <option value="80">Crime</option>
-                        <option value="99">Documentary</option>
-                        <option value="18">Drama</option>
-                        <option value="14">Fantasy</option>
-                        <option value="10749">Romance</option>
+                        <option value="all genres" <?php echo ($genre === 'all genres') ? 'selected' : ''; ?>>All genres</option>
+                        <option value="28" <?php echo ($genre === '28') ? 'selected' : ''; ?>>Action</option>
+                        <option value="12" <?php echo ($genre === '12') ? 'selected' : ''; ?>>Adventure</option>
+                        <option value="16" <?php echo ($genre === '16') ? 'selected' : ''; ?>>Animation</option>
+                        <option value="35" <?php echo ($genre === '35') ? 'selected' : ''; ?>>Comedy</option>
+                        <option value="80" <?php echo ($genre === '80') ? 'selected' : ''; ?>>Crime</option>
+                        <option value="99" <?php echo ($genre === '99') ? 'selected' : ''; ?>>Documentary</option>
+                        <option value="18" <?php echo ($genre === '18') ? 'selected' : ''; ?>>Drama</option>
+                        <option value="14" <?php echo ($genre === '14') ? 'selected' : ''; ?>>Fantasy</option>
+                        <option value="10749" <?php echo ($genre === '10749') ? 'selected' : ''; ?>>Romance</option>
                     </select>
                     <select name="year" class="year">
-                        <option value="all years">All years</option>
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
-                        <option value="2020-2017">2020-2017</option>
-                        <option value="2016-2010">2016-2010</option>
-                        <option value="2009-2000">2009-2000</option>
-                        <option value="2000-1990">2000-1990</option>
+                        <option value="all years" <?php echo ($year === 'all years') ? 'selected' : ''; ?>>All years</option>
+                        <option value="2024" <?php echo ($year === '2024') ? 'selected' : ''; ?>>2024</option>
+                        <option value="2023" <?php echo ($year === '2023') ? 'selected' : ''; ?>>2023</option>
+                        <option value="2022" <?php echo ($year === '2022') ? 'selected' : ''; ?>>2022</option>
+                        <option value="2021" <?php echo ($year === '2021') ? 'selected' : ''; ?>>2021</option>
+                        <option value="2020-2017" <?php echo ($year === '2020-2017') ? 'selected' : ''; ?>>2020-2017</option>
+                        <option value="2016-2010" <?php echo ($year === '2016-2010') ? 'selected' : ''; ?>>2016-2010</option>
+                        <option value="2009-2000" <?php echo ($year === '2009-2000') ? 'selected' : ''; ?>>2009-2000</option>
+                        <option value="2000-1990" <?php echo ($year === '2000-1990') ? 'selected' : ''; ?>>2000-1990</option>
                     </select>
-                    <input type="text" name="query" class="input" placeholder="Search...">
-                    <input type="text" name="actor" class="input" placeholder="Actor...">
-                    <button type="submit">Apply Filters</button>
-                </form>
+                    <button type="submit" id="apply-filters-btn">Apply Filters</button>
+                    </form>
+                </div>
+                <div class="search">
+                    <input type="text" class="input" id="searchInput" placeholder="Search...">
+                    <button onclick="performSearch()" class="search-btn">Search</button>
+                </div>
             </div>
         </div>
         <div class="movies-grid" id="movies-grid">
@@ -207,32 +210,54 @@ $data = json_decode($response, true);
         <button id="see-more-btn">See More</button>
     </section>
 </section>
-<script>
-$(document).ready(function() {
+<script>$(document).ready(function() {
     let currentPage = 1;
-    const totalPages = 10;
+    let totalPages = 10;
 
-    function fetchMovies(page) {
+    function performSearch() {
+        const searchInput = document.getElementById('searchInput').value.trim();
+        const searchUrl = 'explore.php?title=' + encodeURIComponent(searchInput);
+        window.location.href = searchUrl;
+    }
+
+    document.querySelector('.search-btn').addEventListener('click', performSearch);
+
+    function fetchMovies(page, clear = false) {
         const urlParams = new URLSearchParams(window.location.search);
-        const genre = urlParams.get('genre'); 
-        const year = urlParams.get('year'); 
-
-        let apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=<?= $apiKey ?>&page=' + page;
-
-        if (genre && genre !== 'all genres') {
-            apiUrl += '&with_genres=' + encodeURIComponent(genre);
+        const genre = urlParams.get('genre');
+        const year = urlParams.get('year');
+        const title = urlParams.get('title');
+        if (title) {
+            document.getElementById('searchInput').value = title || '';
         }
-        if (year && year !== 'all years') {
-            if (year.includes('-')) {
-                const [startYear, endYear] = year.split('-');
-                apiUrl += '&primary_release_date.gte=' + startYear + '-01-01';
-                apiUrl += '&primary_release_date.lte=' + endYear + '-12-31';
-            } else {
-                apiUrl += '&primary_release_year=' + year;
+        let apiUrl = '';
+
+        if (title) {
+            apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=<?= $apiKey ?>&query=' + encodeURIComponent(title) + '&page=' + page;
+        } else {
+            apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=<?= $apiKey ?>';
+            if (genre && genre !== 'all genres') {
+                apiUrl += '&with_genres=' + encodeURIComponent(genre);
             }
+            if (year && year !== 'all years') {
+                console.log('Year:', year);
+                if (year.includes('-')) {
+                    const [startYear, endYear] = year.split('-');
+                    apiUrl += '&primary_release_date.gte=' + endYear + '-01-01';
+                    apiUrl += '&primary_release_date.lte=' + startYear + '-12-31';
+                    console.log('url:', apiUrl);
+                } else {
+                    apiUrl += '&primary_release_year=' + year;
+                }
+            }
+            apiUrl += '&page=' + page; 
+            console.log('url:', apiUrl);
         }
-
         $.get(apiUrl, function(data) {
+            if (clear) {
+                $('.movies-grid').html(''); // Clear previous results
+            }
+
             let moviesHtml = '';
             if (data.results.length > 0) {
                 data.results.forEach(function(movie) {
@@ -245,47 +270,77 @@ $(document).ready(function() {
                     moviesHtml += '<div class="card-head">';
                     moviesHtml += '<img src="' + posterPath + '" alt="' + title + '" class="card-img">';
                     moviesHtml += '<div class="card-overlay">';
-                    moviesHtml += '<div class="bookmark"><i class="fa-regular fa-bookmark" style="color: #fff;"></i></div>';
                     moviesHtml += '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' + rating + '</span></div>';
-                    moviesHtml += '<div class="addWatchList"><i class="fa-solid fa-circle-plus" style="color: #fff;"></i></div>';
+                    moviesHtml += '<div class="addWatchList"><i class="fa-solid fa-info-circle" style="color: #fff;"></i></div>';
                     moviesHtml += '</div></div>';
                     moviesHtml += '<div class="card-body">';
                     moviesHtml += '<h3 class="card-title">' + title + '</h3>';
-                    moviesHtml += '<div class="card-info"></span><span class="year">' + releaseYear + '</span></div>';
+                    moviesHtml += '<div class="card-info"><span class="year">' + releaseYear + '</span></div>';
                     moviesHtml += '</div></div>';
                 });
                 $('.movies-grid').append(moviesHtml);
             } else {
-                $('.movies-grid').append('<p>No more movies found</p>');
+                if (page === 1) {
+                    $('.movies-grid').html('<p>No movies found</p>');
+                } else {
+                    $('.movies-grid').append('<p>No more movies found</p>');
+                }
+            }
+            totalPages = data.total_pages || totalPages;
+            if (currentPage >= totalPages) {
+                $('#see-more-btn').hide();
+            } else {
+                $('#see-more-btn').show();
             }
         });
     }
-    $('#apply-filters-btn').on('click', function() {
-        $('.movies-grid').html('');
-        fetchMovies(1);
-        currentPage = 1; 
+
+    function applyFilters() {
+        const genre = document.querySelector('select[name="genre"]').value;
+        const year = document.querySelector('select[name="year"]').value;
+
+        const urlParams = new URLSearchParams();
+        if (genre && genre !== 'all genres') {
+            urlParams.set('genre', genre);
+        }
+        if (year && year !== 'all years') {
+            urlParams.set('year', year);
+        }
+
+        const newUrl = window.location.pathname + '?' + urlParams.toString();
+        window.location.href = newUrl;
+    }
+
+    $('#apply-filters-btn').on('click', function(e) {
+        e.preventDefault();
+        applyFilters();
     });
+
     $('#see-more-btn').on('click', function() {
         if (currentPage < totalPages) {
             currentPage++;
-            fetchMovies(currentPage); 
+            fetchMovies(currentPage);
         } else {
             alert('No more pages to load');
         }
     });
+
+    // Initial fetch on page load
+    fetchMovies(1, true);
 });
 
 const toggleBtn = document.querySelector('.toggle_btn');
-            const toggleBtnIcon = document.querySelector('.toggle_btn i');
-            const dropDownMenu = document.querySelector('.dropdown_menu');
+const toggleBtnIcon = document.querySelector('.toggle_btn i');
+const dropDownMenu = document.querySelector('.dropdown_menu');
 
-            toggleBtn.onclick = function() {
-                dropDownMenu.classList.toggle('open');
-                const isOpen = dropDownMenu.classList.contains('open');
-                toggleBtnIcon.classList = isOpen
-                    ? 'fa-solid fa-xmark'
-                    : 'fa-solid fa-bars';
-            };
+toggleBtn.onclick = function() {
+    dropDownMenu.classList.toggle('open');
+    const isOpen = dropDownMenu.classList.contains('open');
+    toggleBtnIcon.classList = isOpen
+        ? 'fa-solid fa-xmark'
+        : 'fa-solid fa-bars';
+};
 </script>
+
 </body>
 </html>
