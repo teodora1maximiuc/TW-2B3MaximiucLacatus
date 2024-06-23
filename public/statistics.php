@@ -1,12 +1,37 @@
-
 <?php
     session_start();
     include_once __DIR__ . '/../src/helpers/session_helper.php';
     include_once __DIR__ . '/../config/config.php';
-    $query = "SELECT id, first_name, last_name, username, email, is_admin FROM users";
+    
+    $query = "SELECT release_year, COUNT(*) as count FROM movies GROUP BY release_year";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
-    $users = $stmt->fetchAll();
+    $movies_per_year = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $query = "SELECT duration FROM movies";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $movies_duration = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    function durationToMinutes($duration) {
+        preg_match('/(\d+) min/', $duration, $matches);
+        return isset($matches[1]) ? (int)$matches[1] : 0;
+    }
+
+    foreach ($movies_duration as &$movie) {
+        $movie['duration_minutes'] = durationToMinutes($movie['duration']);
+    }
+    unset($movie); 
+
+    $durationMap = [];
+    foreach ($movies_duration as $movie) {
+        $duration = $movie['duration_minutes'];
+        if (!isset($durationMap[$duration])) {
+            $durationMap[$duration] = 0;
+        }
+        $durationMap[$duration]++;
+    }
+
+    $lineChartLabels = array_keys($durationMap);
+    $lineChartData = array_values($durationMap);
 
 ?>
 
@@ -70,31 +95,188 @@
             <h1>Statistics</h1>
         </div>
         <div class="container">
-            <div>
-                <canvas id="myChart"></canvas>
+            <div class="chart-container">
+                <div style="flex: 1;">
+                    <canvas id="barChart"></canvas>
+                    <button id="exportBarSVG">Export as SVG</button>
+                    <button id="exportBarWebP">Export as WebP</button>
+                    <button id="exportBarCSV">Export as CSV</button>
+                </div>
+                <div style="flex: 1;">
+                    <canvas id="lineChart"></canvas>
+                    <button id="exportLineSVG">Export as SVG</button>
+                    <button id="exportLineWebP">Export as WebP</button>
+                    <button id="exportLineCSV">Export as CSV</button>
+                </div>
             </div>
         </div>
     </div>
         <script>
-            const ctx = document.getElementById('myChart');
-            new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                y: {
-                    beginAtZero: true
+            const moviesPerYear = <?php echo json_encode($movies_per_year); ?>;
+            const moviesDuration = <?php echo json_encode($movies_duration); ?>;
+
+            const barLabels = moviesPerYear.map(item => item.release_year);
+            const barData = moviesPerYear.map(item => item.count);
+
+            const lineLabels = moviesDuration.map(item => item.release_year);
+            const lineData = moviesDuration.map(item => item.duration_minutes);
+
+            const barCtx = document.getElementById('barChart');
+            const pastelColors = ['#FFB3BA', '#BAE1FF', '#FFFFBA', '#BAFFC9', '#D1BAFF', '#FFD6A5'];
+
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: barLabels,
+                    datasets: [{
+                        label: '# of Movies',
+                        data: barData,
+                        borderWidth: 1,
+                        backgroundColor: pastelColors
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
-                }
-            }
             });
+
+            const lineCtx = document.getElementById('lineChart');
+            const lineChart = new Chart(lineCtx, {
+                type: 'bar',
+                data: {
+                    labels: <?php echo json_encode($lineChartLabels); ?>,
+                    datasets: [{
+                        label: 'Number of Movies',
+                        data: <?php echo json_encode($lineChartData); ?>,
+                        borderColor: pastelColors[1],
+                        backgroundColor: pastelColors[1],
+                        borderWidth: 2,
+                        fill: false,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'linear', 
+                            title: {
+                                display: true,
+                                text: 'Duration (minutes)'
+                            },
+                            ticks: {
+                                stepSize: 10
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Number of Movies'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('exportBarSVG').onclick = function() {
+                const svg = chartToSVG(barChart);
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                downloadFile(url, 'bar_chart.svg');
+            };
+
+            document.getElementById('exportBarWebP').onclick = function() {
+                const canvas = document.querySelector('#barChart');
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    downloadFile(url, 'bar_chart.webp');
+                }, 'image/webp');
+            };
+
+            document.getElementById('exportBarCSV').onclick = function() {
+                const csv = chartToCSV(barChart);
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                downloadFile(url, 'bar_chart.csv');
+            };
+
+            document.getElementById('exportLineSVG').onclick = function() {
+                const svg = chartToSVG(lineChart);
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                downloadFile(url, 'line_chart.svg');
+            };
+            document.getElementById('exportLineWebP').onclick = function() {
+                const canvas = document.querySelector('#lineChart');
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    downloadFile(url, 'line_chart.webp');
+                }, 'image/webp');
+            };
+            document.getElementById('exportLineCSV').onclick = function() {
+                const csv = chartToCSV(lineChart);
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                downloadFile(url, 'line_chart.csv');
+            };
+            function downloadFile(dataUrl, filename) {
+                const a = document.createElement('a');
+                a.href = dataUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+            function chartToCSV(chart) {
+            const datasets = chart.data.datasets;
+            const labels = chart.data.labels;
+            let csv = 'Label,Value\n';
+            labels.forEach((label, index) => {
+                datasets.forEach((dataset) => {
+                    csv += `${label},${dataset.data[index]}\n`;
+                });
+            });
+            return csv;
+            }
+
+            function chartToSVG(chart) {
+                const width = chart.width;
+                const height = chart.height;
+                const labels = chart.data.labels;
+                const datasets = chart.data.datasets;
+                const maxDataValue = Math.max(...datasets[0].data);
+
+                let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
+                svg += `<rect width="100%" height="100%" fill="white"/>`;
+                svg += `<g transform="translate(0, ${height}) scale(1, -1)">`;
+
+                if (chart.config.type === 'bar') {
+                    const barWidth = width / labels.length;
+                    labels.forEach((label, index) => {
+                        datasets.forEach((dataset, datasetIndex) => {
+                            const x = index * barWidth;
+                            const barHeight = (dataset.data[index] / Math.max(...dataset.data)) * height;
+                            const color = dataset.backgroundColor[index];
+                            svg += `<rect x="${x}" y="0" width="${barWidth - 1}" height="${barHeight}" fill="${color}" />`;
+                        });
+                    });
+                } else if (chart.config.type === 'line') {
+                    let points = "";
+                    labels.forEach((label, index) => {
+                        const x = index * (width / labels.length);
+                        const y = (datasets[0].data[index] / maxDataValue) * height;
+                        points += `${x},${y} `;
+                    });
+                    svg += `<polyline fill="none" stroke="${datasets[0].borderColor}" stroke-width="${datasets[0].borderWidth}" points="${points}" />`;
+                }
+
+                svg += `</g>`;
+                svg += `</svg>`;
+                return svg;
+            }
             const toggleBtn = document.querySelector('.toggle_btn');
             const toggleBtnIcon = document.querySelector('.toggle_btn i');
             const dropDownMenu = document.querySelector('.dropdown_menu');
@@ -109,5 +291,4 @@
         </script>
     </section>
 </body>
-
 </html>
