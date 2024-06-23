@@ -80,7 +80,7 @@ header ul {
     z-index: 10000;
 }
 .dropdown_menu.open {
-    height: 240px;
+    height: auto;
 }
 .dropdown_menu li{
     display: flex;
