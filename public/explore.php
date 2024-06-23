@@ -408,6 +408,7 @@ $(document).ready(function() {
         closeModal();
     });
 
+    // Close modal when clicking outside of it
     $(window).on('click', function(event) {
         const modal = $('#movieModal');
         if (event.target == modal[0]) {

@@ -21,11 +21,11 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
                 <img src="images/logo.png" alt="FilmQuest Logo" class="logo-img">
             </a>
             <ul class="links">
-                <li><a href="index.php?page=home" class="active">Home</a></li>
+                <li><a href="home.php?page=home" class="active">Home</a></li>
                 <li><a href="index.php?page=about">About</a></li>
-                <li><a href="index.php?page=watchlist">WatchList</a></li>
-                <li><a href="index.php?page=explore">Explore</a></li>
-                <li><a href="index.php?page=help">Help</a></li>
+                <li><a href="watchList.php">WatchList</a></li>
+                <li><a href="explore.php">Explore</a></li>
+                <li><a href="help.php">Help</a></li>
 
                 <?php if(isAdmin()) : ?>
                         <li><a href="user_management.php">User Management</a></li>
