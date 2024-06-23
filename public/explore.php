@@ -41,7 +41,6 @@ if (!empty($actor)) {
     
     if (isset($actorData['results'][0]['id'])) {
         $actorId = $actorData['results'][0]['id'];
-        // Fetch movies by actor ID
         $url = 'https://api.themoviedb.org/3/person/' . $actorId . '/movie_credits?api_key=' . $apiKey;
     }
 }
@@ -166,7 +165,6 @@ $data = json_decode($response, true);
         <div class="movies-grid" id="movies-grid">
         <?php
             if (isset($data['cast']) && !empty($data['cast'])) {
-                // If searching by actor, use 'cast' array
                 foreach ($data['cast'] as $movie) {
                     $title = $movie['title'];
                     $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
@@ -228,12 +226,12 @@ $data = json_decode($response, true);
                 <h2 id="modalTitle"></h2>
                 <p id="modalYear"></p>
                 <p id="modalDescription"></p>
-                <a href="aboutMovie.php" id="modalStatisticLink">Statistic</a> <!-- Add id to link -->
+                <a href="aboutMovie.php" id="modalStatisticLink">Statistic</a>
             </div>
         </div>
         <span class="close">&times;</span>
     </div>
-    <input type="hidden" id="modalMovieId"> <!-- Hidden input for movie ID -->
+    <input type="hidden" id="modalMovieId"> 
 </div>
 
 <script>
@@ -282,7 +280,7 @@ $(document).ready(function() {
         }
         $.get(apiUrl, function(data) {
             if (clear) {
-                $('.movies-grid').html(''); // Clear previous results
+                $('.movies-grid').html('');
             }
 
             let moviesHtml = '';
@@ -350,7 +348,6 @@ $(document).ready(function() {
         }
     }
 
-    // Initial fetch on page load
     fetchMovies(1, true);
     function fetchMovieDetailsByTitle(movieTitle, movieId) {
         const apiKey = '0136e68e78a0433f8b5bdcec484af43c';
@@ -387,37 +384,30 @@ $(document).ready(function() {
             }
         });
     }
-
-    // Function to show modal with movie details
     function showModal(title, poster, year, description, movieId) {
         const modal = $('#movieModal');
         modal.find('.modal-content #modalTitle').text(title);
         modal.find('.modal-content #modalYear').text(`Year: ${year}`);
         modal.find('.modal-content #modalDescription').text(description);
-        $('#modalMovieId').val(movieId); // Set the movie ID in the hidden input
-        $('#modalStatisticLink').attr('href', 'aboutMovie.php?id=' + movieId); // Set the link with movie ID
+        $('#modalMovieId').val(movieId); 
+        $('#modalStatisticLink').attr('href', 'aboutMovie.php?id=' + movieId); 
         modal.css('display', 'block');
     }
-
-    // Close modal function
     function closeModal() {
         $('#movieModal').css('display', 'none');
         $('#modalTrailer').attr('src', '');
     }
 
-    // Event delegation for movie cards
     $(document).on('click', '.movie-card', function() {
-        const movieTitle = $(this).find('.card-title').text(); // Get the title from clicked card
+        const movieTitle = $(this).find('.card-title').text(); 
         const movieId = $(this).find('.movie-id').text();
         fetchMovieDetailsByTitle(movieTitle, movieId);
     });
 
-    // Close modal on close button click
     $(document).on('click', '.modal .close', function() {
         closeModal();
     });
 
-    // Close modal when clicking outside of it
     $(window).on('click', function(event) {
         const modal = $('#movieModal');
         if (event.target == modal[0]) {

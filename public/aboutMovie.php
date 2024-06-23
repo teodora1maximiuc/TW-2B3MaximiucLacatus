@@ -74,7 +74,7 @@ if ($movieData && isset($movieData['credits']['cast'])) {
         </div>
         <div class="Information">
             <!-- <?php
-                $movieId = $_GET['id']; // Get the movie ID from the URL
+                $movieId = $_GET['id'];
             ?> -->
             <div class="movie">
                 <div class="image">
@@ -113,7 +113,6 @@ if ($movieData && isset($movieData['credits']['cast'])) {
             <div class="Statistics">
                 <h3>Statistics</h3>
                 <div id="movie-stats">
-                    <p>Some movie statistics.</p>
                 </div>
             </div>
             <div class="Rating">
@@ -127,8 +126,8 @@ if ($movieData && isset($movieData['credits']['cast'])) {
         </div>
     </section>
     <script>
-        const apiKey = '0136e68e78a0433f8b5bdcec484af43c'; // Replace with your actual TMDb API key
-        const movieId = '<?php echo $movieId; ?>'; // Embed PHP variable into JavaScript
+        const apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+        const movieId = '<?php echo $movieId; ?>'; 
 
         fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`)
             .then(response => response.json())
@@ -162,8 +161,6 @@ if ($movieData && isset($movieData['credits']['cast'])) {
                 <p>Revenue: $${data.revenue.toLocaleString()}</p>
                 <p>Popularity Score: ${data.popularity}</p>
             `;
-            createRatingTrendChart(movieId);
-            createBoxOfficePerformanceChart(movieId);
         }
 
         function createRatingTrendChart(movieId) {
@@ -208,13 +205,10 @@ if ($movieData && isset($movieData['credits']['cast'])) {
         }
 
         function createBoxOfficePerformanceChart(movieId) {
-            // Example of creating a box office performance chart using D3.js
-            // Replace with actual data fetching and visualization
             const boxOfficeData = [
                 { date: '2021-01-01', revenue: 500000 },
                 { date: '2021-02-01', revenue: 1500000 },
                 { date: '2021-03-01', revenue: 2500000 },
-                // Add more data points here
             ];
 
             const width = 500;
