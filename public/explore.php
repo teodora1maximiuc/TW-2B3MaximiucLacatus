@@ -228,11 +228,12 @@ $data = json_decode($response, true);
                 <h2 id="modalTitle"></h2>
                 <p id="modalYear"></p>
                 <p id="modalDescription"></p>
-                <a href="statistics.php">Statistic</a>
+                <a href="aboutMovie.php" id="modalStatisticLink">Statistic</a> <!-- Add id to link -->
             </div>
         </div>
         <span class="close">&times;</span>
     </div>
+    <input type="hidden" id="modalMovieId"> <!-- Hidden input for movie ID -->
 </div>
 
 <script>
@@ -366,15 +367,15 @@ $(document).ready(function() {
                     const year = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
                     const description = movie.overview ? movie.overview : 'No description available';
 
-                    showModal(title, poster, year, description);
+                    showModal(title, poster, year, description, movieId);
 
                     $.get(trailerUrl, function(response) {
-                    if (response.results.length > 0) {
-                        const trailerKey = response.results[0].key;
-                        const trailerUrl = `https://www.youtube.com/embed/${trailerKey}`;
+                        if (response.results.length > 0) {
+                            const trailerKey = response.results[0].key;
+                            const trailerUrl = `https://www.youtube.com/embed/${trailerKey}`;
 
-                        $('#modalTrailer').attr('src', trailerUrl);
-                         }
+                            $('#modalTrailer').attr('src', trailerUrl);
+                        }
                     });
                 } else {
                     alert('Movie details not found.');
@@ -388,11 +389,13 @@ $(document).ready(function() {
     }
 
     // Function to show modal with movie details
-    function showModal(title, poster, year, description) {
+    function showModal(title, poster, year, description, movieId) {
         const modal = $('#movieModal');
         modal.find('.modal-content #modalTitle').text(title);
         modal.find('.modal-content #modalYear').text(`Year: ${year}`);
         modal.find('.modal-content #modalDescription').text(description);
+        $('#modalMovieId').val(movieId); // Set the movie ID in the hidden input
+        $('#modalStatisticLink').attr('href', 'aboutMovie.php?id=' + movieId); // Set the link with movie ID
         modal.css('display', 'block');
     }
 

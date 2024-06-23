@@ -60,12 +60,14 @@ header ul {
     color: #fff;
     border-radius: 20px;
     z-index: 1001;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .navbar ul li a:hover, 
 .navbar ul li a.active {
     background-color: #fff !important;
     color: #57648C !important;
+    text-shadow: none;
 }
 
 .navbar .toggle_btn {
@@ -512,7 +514,6 @@ header ul {
     padding: 20px;
     border-radius: 10px;
     max-width: 600px;
-    overflow-y: auto;
     max-height: 90%;
 }
 
