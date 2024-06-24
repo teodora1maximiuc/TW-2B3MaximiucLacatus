@@ -1,53 +1,52 @@
 <?php
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    include_once __DIR__ . '/../src/helpers/session_helper.php';
-    require_once __DIR__ . '/../config/config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once __DIR__ . '/../src/helpers/session_helper.php';
 
-    $apiKey = '0136e68e78a0433f8b5bdcec484af43c';
-    $searchQuery = isset($_GET['query']) ? urlencode($_GET['query']) : '';
-    $genre = isset($_GET['genre']) ? $_GET['genre'] : 'all genres';
-    $year = isset($_GET['year']) ? $_GET['year'] : 'all years';
-    $title = isset($_GET['title']) ? $_GET['title'] : '';
-    $actor = isset($_GET['actor']) ? $_GET['actor'] : '';
+$apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+$searchQuery = isset($_GET['query']) ? urlencode($_GET['query']) : '';
+$genre = isset($_GET['genre']) ? $_GET['genre'] : 'all genres';
+$year = isset($_GET['year']) ? $_GET['year'] : 'all years';
+$title = isset($_GET['title']) ? $_GET['title'] : '';
+$actor = isset($_GET['actor']) ? $_GET['actor'] : '';
 
-    $url = 'https://api.themoviedb.org/3/discover/movie?api_key=' . $apiKey;
+$url = 'https://api.themoviedb.org/3/discover/movie?api_key=' . $apiKey;
 
-    if ($genre !== 'all genres') {
-        if (is_numeric($genre)) {
-            $url .= '&with_genres=' . urlencode($genre);
-        }
+if ($genre !== 'all genres') {
+    if (is_numeric($genre)) {
+        $url .= '&with_genres=' . urlencode($genre);
     }
-    if ($year !== 'all years') {
-        if (strpos($year, '-') !== false) {
-            list($startYear, $endYear) = explode('-', $year);
-            $url .= '&primary_release_date.gte=' . $startYear . '-01-01';
-            $url .= '&primary_release_date.lte=' . $endYear . '-12-31';
-        } else {
-            $url .= '&primary_release_year=' . $year;
-        }
+}
+if ($year !== 'all years') {
+    if (strpos($year, '-') !== false) {
+        list($startYear, $endYear) = explode('-', $year);
+        $url .= '&primary_release_date.gte=' . $startYear . '-01-01';
+        $url .= '&primary_release_date.lte=' . $endYear . '-12-31';
+    } else {
+        $url .= '&primary_release_year=' . $year;
     }
-    if (!empty($searchQuery)) {
-        $url .= '&query=' . $searchQuery;
-    }
-    if (!empty($title)) {
-        $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $apiKey . '&query=' . urlencode($title);
-    }
+}
+if (!empty($searchQuery)) {
+    $url .= '&query=' . $searchQuery;
+}
+if (!empty($title)) {
+    $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $apiKey . '&query=' . urlencode($title);
+}
 
-    if (!empty($actor)) {
-        $actorSearchUrl = 'https://api.themoviedb.org/3/search/person?api_key=' . $apiKey . '&query=' . urlencode($actor);
-        $actorResponse = file_get_contents($actorSearchUrl);
-        $actorData = json_decode($actorResponse, true);
-        
-        if (isset($actorData['results'][0]['id'])) {
-            $actorId = $actorData['results'][0]['id'];
-            $url = 'https://api.themoviedb.org/3/person/' . $actorId . '/movie_credits?api_key=' . $apiKey;
-        }
+if (!empty($actor)) {
+    $actorSearchUrl = 'https://api.themoviedb.org/3/search/person?api_key=' . $apiKey . '&query=' . urlencode($actor);
+    $actorResponse = file_get_contents($actorSearchUrl);
+    $actorData = json_decode($actorResponse, true);
+    
+    if (isset($actorData['results'][0]['id'])) {
+        $actorId = $actorData['results'][0]['id'];
+        $url = 'https://api.themoviedb.org/3/person/' . $actorId . '/movie_credits?api_key=' . $apiKey;
     }
+}
 
-    $response = file_get_contents($url);
-    $data = json_decode($response, true);
+$response = file_get_contents($url);
+$data = json_decode($response, true);
 ?>
 
 <!DOCTYPE html>
@@ -80,7 +79,7 @@
                     <li><a href="user_management.php">User Management</a></li>
                 <?php endif; ?>
                 <?php if(!isset($_SESSION['user_id'])) : ?> 
-                    <li><a href="login.php">Login</a></li>
+                <li><a href="login.php">Login</a></li>
                 <?php else : ?>
                     <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
                 <?php endif; ?>
@@ -102,7 +101,7 @@
                 <li><a href="user_management.php">User Management</a></li>
             <?php endif; ?>
             <?php if(!isset($_SESSION['user_id'])) : ?> 
-                <li><a href="login.php">Login</a></li>
+            <li><a href="login.php">Login</a></li>
             <?php else : ?>
                 <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
             <?php endif; ?>
@@ -227,22 +226,9 @@
         <div class="modal-details">
             <div class="modal-info">
                 <h2 id="modalTitle"></h2>
-                <h3 id="modalYear"></h3>
+                <p id="modalYear"></p>
                 <p id="modalDescription"></p>
-                <div class="button-container">
-                <div class="watchlist-dropdown">
-                    <button class="watchlist-btn" onclick="toggleWatchlistDropdown(this)">
-                        <i class="fa-solid fa-plus"></i>
-                        <span class="watchlist-text">Add to Watchlist</span>
-                    </button>
-                    <div class="watchlist-dropdown-content">
-                        <a href="#" onclick="addToWatchlist(this, 'Completed')">Completed</a>
-                        <a href="#" onclick="addToWatchlist(this, 'On Hold')">On Hold</a>
-                        <a href="#" onclick="addToWatchlist(this, 'Plan to Watch')">Plan to Watch</a>
-                    </div>
-                </div>
-                <a href="aboutMovie.php" class="statistic-button" id="modalStatisticLink">Statistic</a>
-                </div>
+                <a href="aboutMovie.php" id="modalStatisticLink">Statistic</a>
             </div>
         </div>
         <span class="close">&times;</span>
@@ -251,81 +237,175 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('.watchlist-btn').click(function(e) {
-            e.preventDefault();
-            $(this).parent().toggleClass('active');
-        });
-        
-        $(document).on('click', function(e) {
-            if (!$(e.target).closest('.addWatchList').length) {
-                $('.addWatchList').removeClass('active');
+$(document).ready(function() {
+    let currentPage = 1;
+    let totalPages = 10;
+
+    function performSearch() {
+        const searchInput = document.getElementById('searchInput').value.trim();
+        const searchUrl = 'explore.php?title=' + encodeURIComponent(searchInput);
+        window.location.href = searchUrl;
+    }
+
+    document.querySelector('.search-btn').addEventListener('click', performSearch);
+
+    function fetchMovies(page, clear = false) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const genre = urlParams.get('genre');
+        const year = urlParams.get('year');
+        const title = urlParams.get('title');
+        if (title) {
+            document.getElementById('searchInput').value = title || '';
+        }
+        let apiUrl = '';
+
+        if (title) {
+            apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=<?= $apiKey ?>&query=' + encodeURIComponent(title) + '&page=' + page;
+        } else {
+            apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=<?= $apiKey ?>';
+            if (genre && genre !== 'all genres') {
+                apiUrl += '&with_genres=' + encodeURIComponent(genre);
+            }
+            if (year && year !== 'all years') {
+                console.log('Year:', year);
+                if (year.includes('-')) {
+                    const [startYear, endYear] = year.split('-');
+                    apiUrl += '&primary_release_date.gte=' + endYear + '-01-01';
+                    apiUrl += '&primary_release_date.lte=' + startYear + '-12-31';
+                    console.log('url:', apiUrl);
+                } else {
+                    apiUrl += '&primary_release_year=' + year;
+                }
+            }
+            apiUrl += '&page=' + page; 
+            console.log('url:', apiUrl);
+        }
+        $.get(apiUrl, function(data) {
+            if (clear) {
+                $('.movies-grid').html('');
+            }
+
+            let moviesHtml = '';
+            if (data.results.length > 0) {
+                data.results.forEach(function(movie) {
+                    const title = movie.title;
+                    const posterPath = 'https://image.tmdb.org/t/p/w500/' + movie.poster_path;
+                    const releaseYear = new Date(movie.release_date).getFullYear();
+                    const rating = movie.vote_average;
+                    const movieId = movie.id;
+                    console.log(movieId);
+
+                    moviesHtml += '<div class="movie-card" >';
+                    moviesHtml += '<div class="movie-id" style="display: none;">' + movieId + '</div>';
+                    moviesHtml += '<div class="card-head">';
+                    moviesHtml += '<img src="' + posterPath + '" alt="' + title + '" class="card-img">';
+                    moviesHtml += '<div class="card-overlay">';
+                    moviesHtml += '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' + rating + '</span></div>';
+                    moviesHtml += '<div class="addWatchList"><i class="fa-solid fa-info-circle" style="color: #fff;"></i></div>';
+                    moviesHtml += '</div></div>';
+                    moviesHtml += '<div class="card-body">';
+                    moviesHtml += '<h3 class="card-title">' + title + '</h3>';
+                    moviesHtml += '<div class="card-info"><span class="year">' + releaseYear + '</span></div>';
+                    moviesHtml += '</div></div>';
+                });
+                $('.movies-grid').append(moviesHtml);
+            } else {
+                if (page === 1) {
+                    $('.movies-grid').html('<p>No movies found</p>');
+                } else {
+                    $('.movies-grid').append('<p>No more movies found</p>');
+                }
+            }
+            totalPages = data.total_pages || totalPages;
+            if (currentPage >= totalPages) {
+                $('#seeMoreButton').hide();
+            } else {
+                $('#seeMoreButton').show();
             }
         });
-    });
+    }
 
-    function toggleWatchlistDropdown(button) {
-        const dropdownContent = $(button).siblings('.watchlist-dropdown-content');
-        dropdownContent.toggle();
+    function applyFilters() {
+        const genre = document.querySelector('select[name="genre"]').value;
+        const year = document.querySelector('select[name="year"]').value;
 
-        const isOpen = dropdownContent.is(':visible');
-        const icon = $(button).find('i');
+        const urlParams = new URLSearchParams();
+        if (genre && genre !== 'all genres') {
+            urlParams.set('genre', genre);
+        }
+        if (year && year !== 'all years') {
+            urlParams.set('year', year);
+        }
 
-        if (isOpen) {
-            icon.removeClass('fa-plus').addClass('fa-check');
+        const newUrl = window.location.pathname + '?' + urlParams.toString();
+        window.location.href = newUrl;
+    }
+    $('#seeMoreButton').on('click', loadMore);
+    function loadMore() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchMovies(currentPage);
         } else {
-            icon.removeClass('fa-check').addClass('fa-plus');
+            alert('No more pages to load');
         }
     }
-    /*functie de adaugare a unui film in watchlist in categoria selectata */
-    function addToWatchlist(link, option) {
-        const selectedOptionText = option;
-        const movieId = $('#modalMovieId').val();
 
+    fetchMovies(1, true);
+    function fetchMovieDetailsByTitle(movieTitle, movieId) {
+        const apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+        const apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=0136e68e78a0433f8b5bdcec484af43c' + '&query=' + encodeURIComponent(movieTitle);
+        const trailerUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=en-US`;
         $.ajax({
-            url: '/TW-2B3MaximiucLacatus/src/views/add_to_watchlist.php',
-            type: 'POST',
-            data: { movie_id: movieId, category: selectedOptionText },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    alert(response.message);
-                    const watchlistButton = $('.watchlist-btn');
-                    watchlistButton.find('span.watchlist-text').text(selectedOptionText);
-                    watchlistButton.find('i').removeClass('fa-plus').addClass('fa-check');
-                    watchlistButton.siblings('.watchlist-dropdown-content').hide();
+            url: apiUrl,
+            type: 'GET',
+            success: function(data) {
+                if (data.results.length > 0) {
+                    const movie = data.results[0];
+                    const title = movie.title;
+                    const poster = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+                    const year = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
+                    const description = movie.overview ? movie.overview : 'No description available';
+
+                    showModal(title, poster, year, description, movieId);
+
+                    $.get(trailerUrl, function(response) {
+                        if (response.results.length > 0) {
+                            const trailerKey = response.results[0].key;
+                            const trailerUrl = `https://www.youtube.com/embed/${trailerKey}`;
+
+                            $('#modalTrailer').attr('src', trailerUrl);
+                        }
+                    });
                 } else {
-                    alert(response.message);
-                    resetWatchlistButton();
+                    alert('Movie details not found.');
                 }
             },
-            error: function(xhr, status, error) {
-                alert('Error adding movie to watchlist. Please try again later.');
-                console.error(xhr.responseText);
+            error: function(err) {
+                console.error('Error fetching movie details:', err);
+                alert('Failed to fetch movie details. Please try again later.');
             }
         });
     }
-
-    function resetWatchlistButton() {
-        const button = $('.watchlist-btn');
-        const icon = button.find('i');
-        const text = button.find('.watchlist-text');
-
-        icon.removeClass('fa-check').addClass('fa-plus');
-        text.text('Add to Watchlist');
-        $('.watchlist-dropdown-content').hide();
+    function showModal(title, poster, year, description, movieId) {
+        const modal = $('#movieModal');
+        modal.find('.modal-content #modalTitle').text(title);
+        modal.find('.modal-content #modalYear').text(`Year: ${year}`);
+        modal.find('.modal-content #modalDescription').text(description);
+        $('#modalMovieId').val(movieId); 
+        $('#modalStatisticLink').attr('href', 'aboutMovie.php?id=' + movieId); 
+        modal.css('display', 'block');
+    }
+    function closeModal() {
+        $('#movieModal').css('display', 'none');
+        $('#modalTrailer').attr('src', '');
     }
 
-    $(document).ready(function() {
-        let currentPage = 1;
-        let totalPages = 10;
+    $(document).on('click', '.movie-card', function() {
+        const movieTitle = $(this).find('.card-title').text(); 
+        const movieId = $(this).find('.movie-id').text();
+        fetchMovieDetailsByTitle(movieTitle, movieId);
+    });
 
-<<<<<<< Updated upstream
-        function performSearch() {
-            const searchInput = document.getElementById('searchInput').value.trim();
-            const searchUrl = 'explore.php?title=' + encodeURIComponent(searchInput);
-            window.location.href = searchUrl;
-=======
     $(document).on('click', '.modal .close', function() {
         closeModal();
     });
@@ -333,193 +413,21 @@
         const modal = $('#movieModal');
         if (event.target == modal[0]) {
             closeModal();
->>>>>>> Stashed changes
         }
-
-        document.querySelector('.search-btn').addEventListener('click', performSearch);
-
-        function fetchMovies(page, clear = false) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const genre = urlParams.get('genre');
-            const year = urlParams.get('year');
-            const title = urlParams.get('title');
-            if (title) {
-                document.getElementById('searchInput').value = title || '';
-            }
-            let apiUrl = '';
-
-            if (title) {
-                apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=<?= $apiKey ?>&query=' + encodeURIComponent(title) + '&page=' + page;
-            } else {
-                apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=<?= $apiKey ?>';
-                if (genre && genre !== 'all genres') {
-                    apiUrl += '&with_genres=' + encodeURIComponent(genre);
-                }
-                if (year && year !== 'all years') {
-                    console.log('Year:', year);
-                    if (year.includes('-')) {
-                        const [startYear, endYear] = year.split('-');
-                        apiUrl += '&primary_release_date.gte=' + endYear + '-01-01';
-                        apiUrl += '&primary_release_date.lte=' + startYear + '-12-31';
-                        console.log('url:', apiUrl);
-                    } else {
-                        apiUrl += '&primary_release_year=' + year;
-                    }
-                }
-                apiUrl += '&page=' + page; 
-                console.log('url:', apiUrl);
-            }
-            $.get(apiUrl, function(data) {
-                if (clear) {
-                    $('.movies-grid').html('');
-                }
-
-                let moviesHtml = '';
-                if (data.results.length > 0) {
-                    data.results.forEach(function(movie) {
-                        const title = movie.title;
-                        const posterPath = 'https://image.tmdb.org/t/p/w500/' + movie.poster_path;
-                        const releaseYear = new Date(movie.release_date).getFullYear();
-                        const rating = movie.vote_average;
-                        const movieId = movie.id;
-                        console.log(movieId);
-
-                        moviesHtml += '<div class="movie-card" >';
-                        moviesHtml += '<div class="movie-id" style="display: none;">' + movieId + '</div>';
-                        moviesHtml += '<div class="card-head">';
-                        moviesHtml += '<img src="' + posterPath + '" alt="' + title + '" class="card-img">';
-                        moviesHtml += '<div class="card-overlay">';
-                        moviesHtml += '<div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>' + rating + '</span></div>';
-                        moviesHtml += '<div class="addWatchList"><i class="fa-solid fa-info-circle" style="color: #fff;"></i></div>';
-                        moviesHtml += '</div></div>';
-                        moviesHtml += '<div class="card-body">';
-                        moviesHtml += '<h3 class="card-title">' + title + '</h3>';
-                        moviesHtml += '<div class="card-info"><span class="year">' + releaseYear + '</span></div>';
-                        moviesHtml += '</div></div>';
-                    });
-                    $('.movies-grid').append(moviesHtml);
-                } else {
-                    if (page === 1) {
-                        $('.movies-grid').html('<p>No movies found</p>');
-                    } else {
-                        $('.movies-grid').append('<p>No more movies found</p>');
-                    }
-                }
-                totalPages = data.total_pages || totalPages;
-                if (currentPage >= totalPages) {
-                    $('#seeMoreButton').hide();
-                } else {
-                    $('#seeMoreButton').show();
-                }
-            });
-        }
-
-        function applyFilters() {
-            const genre = document.querySelector('select[name="genre"]').value;
-            const year = document.querySelector('select[name="year"]').value;
-
-            const urlParams = new URLSearchParams();
-            if (genre && genre !== 'all genres') {
-                urlParams.set('genre', genre);
-            }
-            if (year && year !== 'all years') {
-                urlParams.set('year', year);
-            }
-
-            const newUrl = window.location.pathname + '?' + urlParams.toString();
-            window.location.href = newUrl;
-        }
-        $('#seeMoreButton').on('click', loadMore);
-        function loadMore() {
-            if (currentPage < totalPages) {
-                currentPage++;
-                fetchMovies(currentPage);
-            } else {
-                alert('No more pages to load');
-            }
-        }
-
-        fetchMovies(1, true);
-        function fetchMovieDetailsByTitle(movieTitle, movieId) {
-            const apiKey = '0136e68e78a0433f8b5bdcec484af43c';
-            const apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=0136e68e78a0433f8b5bdcec484af43c' + '&query=' + encodeURIComponent(movieTitle);
-            const trailerUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=en-US`;
-            $.ajax({
-                url: apiUrl,
-                type: 'GET',
-                success: function(data) {
-                    if (data.results.length > 0) {
-                        const movie = data.results[0];
-                        const title = movie.title;
-                        const poster = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
-                        const year = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
-                        const description = movie.overview ? movie.overview : 'No description available';
-
-                        showModal(title, poster, year, description, movieId);
-
-                        $.get(trailerUrl, function(response) {
-                            if (response.results.length > 0) {
-                                const trailerKey = response.results[0].key;
-                                const trailerUrl = `https://www.youtube.com/embed/${trailerKey}`;
-
-                                $('#modalTrailer').attr('src', trailerUrl);
-                            }
-                        });
-                    } else {
-                        alert('Movie details not found.');
-                    }
-                },
-                error: function(err) {
-                    console.error('Error fetching movie details:', err);
-                    alert('Failed to fetch movie details. Please try again later.');
-                }
-            });
-        }
-        function showModal(title, poster, year, description, movieId) {
-            const modal = $('#movieModal');
-            modal.find('.modal-content #modalTitle').text(title);
-            modal.find('.modal-content #modalYear').text(`${year}`);
-            modal.find('.modal-content #modalDescription').text(description);
-            $('#modalMovieId').val(movieId); 
-            $('#modalStatisticLink').attr('href', 'aboutMovie.php?id=' + movieId); 
-            modal.css('display', 'block');
-        }
-        function closeModal() {
-            $('#movieModal').css('display', 'none');
-            $('#modalTrailer').attr('src', '');
-            resetWatchlistButton();
-        }
-
-        $(document).on('click', '.movie-card', function() {
-            const movieTitle = $(this).find('.card-title').text(); 
-            const movieId = $(this).find('.movie-id').text();
-            fetchMovieDetailsByTitle(movieTitle, movieId);
-        });
-
-        $(document).on('click', '.modal .close', function() {
-            closeModal();
-        });
-
-        $(window).on('click', function(event) {
-            const modal = $('#movieModal');
-            if (event.target == modal[0]) {
-                closeModal();
-            }
-        });
-
     });
+});
 
-    const toggleBtn = document.querySelector('.toggle_btn');
-    const toggleBtnIcon = document.querySelector('.toggle_btn i');
-    const dropDownMenu = document.querySelector('.dropdown_menu');
+const toggleBtn = document.querySelector('.toggle_btn');
+const toggleBtnIcon = document.querySelector('.toggle_btn i');
+const dropDownMenu = document.querySelector('.dropdown_menu');
 
-    toggleBtn.onclick = function() {
-        dropDownMenu.classList.toggle('open');
-        const isOpen = dropDownMenu.classList.contains('open');
-        toggleBtnIcon.classList = isOpen
-            ? 'fa-solid fa-xmark'
-            : 'fa-solid fa-bars';
-    };
+toggleBtn.onclick = function() {
+    dropDownMenu.classList.toggle('open');
+    const isOpen = dropDownMenu.classList.contains('open');
+    toggleBtnIcon.classList = isOpen
+        ? 'fa-solid fa-xmark'
+        : 'fa-solid fa-bars';
+};
 </script>
 
 </body>
