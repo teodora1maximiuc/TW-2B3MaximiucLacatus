@@ -99,6 +99,7 @@
             <ul>
                 <li><a href="#safety">5.1 Protecția datelor</a></li>
                  <li><a href="#security">5.2 Securizarea datelor</a></li>
+                 <li><a href="#software-attributes">5.3 Calitățile Software </a></li>
             </ul>
         </li>
     </ul>
@@ -463,6 +464,10 @@
                     panoul de control,
                     va putea adaugă/ștearge
                     conturi ale utilizatorilor.
+                    <ul>
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/admin.png"
+                            width=800></li>
+                    </ul>
                     <h5 id="administrator-2">4.3.2 Actualizare informațiilor</h5>
                     <ul>
                         <li>
@@ -490,8 +495,27 @@
                     <p>
                         Aplicația va asigura confidențialitatea datelor prin intermediul criptării parolei.
                     </p>
+                <section id="security">
+                    <h4>5.2 Securizarea datelor</h4>
+                    <p>
+                        Autorizarea utilizatorilor se face utilizând sesiuni PHP pentru menținerea stării de autentificare a utilizatorului. Utilizatorii au acces doar la
+                        informații legate
+                        de progresul in cadrul site-ului, celelalte informații fiind ascunse. Prin folosirea token-urilor CSFR si validarea acestora în formularele importante ale aplicației, aplicația oferă protecție împotriva CSFR (Cross-Site Request Forgery). Mai mult, toate
+                        datele sunt introduse
+                        in baza de date prin intermediul unor <b>prepared statements</b>, care asigura prevenirea SQL
+                        Injection.
+                    </p>
                 </section>
-                
+                <section id="software-attributes">
+                    <h4>5.3 Calitățile Software</h4>
+                    <ul>
+                        <li>Adaptabilitate</li>
+                        <li>Ușurință în utilizare</li>
+                        <li>Mentenabilitate</li>
+                        <li>Performanță</li>
+                        <li>Flexibilitate</li>
+                    </ul>
+                </section>
             </section>
         </section>
     </section>
