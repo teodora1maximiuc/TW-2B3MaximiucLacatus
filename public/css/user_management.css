@@ -51,11 +51,13 @@ header ul {
     color: #fff;
     border-radius: 20px;
     z-index: 1001;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 .navbar ul li a:hover, 
 .navbar ul li a.active {
     background-color: #fff !important;
     color: #57648C !important;
+    text-shadow: none;
 }
 .navbar .toggle_btn {
     font-size: 1.5rem;
@@ -164,8 +166,8 @@ td.Actions {
 
 td.Actions .button {
     position: relative;
-    margin: 0 5px; /* Add margin to space out the buttons */
-    white-space: nowrap; /* Prevent buttons from wrapping to the next line */
+    margin: 0 5px;
+    white-space: nowrap; 
 }
 .buttons {
     white-space: nowrap;

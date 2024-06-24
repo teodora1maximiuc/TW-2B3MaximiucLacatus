@@ -39,6 +39,7 @@ if ($movieData && isset($movieData['credits']['cast'])) {
                     <li><a href="home.php#about-section">About</a></li>
                     <li><a href="watchList.php">WatchList</a></li>
                     <li><a href="explore.php" class="active">Explore</a></li>
+                    <li><a href="statistics.php">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
                     <?php if(isAdmin()) : ?>
                         <li><a href="user_management.php">User Management</a></li>
@@ -60,6 +61,7 @@ if ($movieData && isset($movieData['credits']['cast'])) {
                 <li><a href="home.php#about-section">About</a></li>
                 <li><a href="watchList.php">WatchList</a></li>
                 <li><a href="explore.php" class="active">Explore</a></li>
+                <li><a href="statistics.php">Statistics</a></li>
                 <li><a href="help.php">Help</a></li>
                 <?php if(isAdmin()) : ?>
                     <li><a href="user_management.php">User Management</a></li>

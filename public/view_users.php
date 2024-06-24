@@ -2,8 +2,6 @@
 <?php
     include_once __DIR__ . '/../src/helpers/session_helper.php';
     include_once __DIR__ . '/../config/config.php';
-
-    // Fetch users from the database
     $query = "SELECT id, first_name, last_name, username, email, is_admin FROM users";
     $stmt = $pdo->prepare($query);
     $stmt->execute();

@@ -62,6 +62,7 @@
                     <li><a href="home.php#about-section">About</a></li>
                     <li><a href="watchList.php">WatchList</a></li>
                     <li><a href="explore.php">Explore</a></li>
+                    <li><a href="statistics.php">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
                     <li><a href="login.php" class="active">Login</a></li>
                 </ul>
@@ -76,6 +77,7 @@
                 <li><a href="home.php#about-section">About</a></li>
                 <li><a href="watchList.php">WatchList</a></li>
                 <li><a href="explore.php">Explore</a></li>
+                <li><a href="statistics.php">Statistics</a></li>
                 <li><a href="help.php">Help</a></li>
                 <li><a href="login.php" class="active">Login</a></li>
             </ul>

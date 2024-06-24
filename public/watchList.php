@@ -66,6 +66,7 @@ if (!isset($_SESSION['user_id'])) {
                     <li><a href="home.php#about-section">About</a></li>
                     <li><a href="watchList.php">WatchList</a></li>
                     <li><a href="explore.php">Explore</a></li>
+                    <li><a href="statistics.php">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
                     <li><a href="login.php">Login</a></li>
                 </ul>
@@ -80,6 +81,7 @@ if (!isset($_SESSION['user_id'])) {
                 <li><a href="home.php#about-section">About</a></li>
                 <li><a href="watchList.php">WatchList</a></li>
                 <li><a href="explore.php">Explore</a></li>
+                <li><a href="statistics.php">Statistics</a></li>
                 <li><a href="help.php">Help</a></li>
                 <li><a href="login.php">Login</a></li>
             </ul>
@@ -148,6 +150,7 @@ $movies = getMoviesByCategory($user_id, $category);
                     <li><a href="home.php#about-section">About</a></li>
                     <li><a href="watchList.php">WatchList</a></li>
                     <li><a href="explore.php">Explore</a></li>
+                    <li><a href="statistics.php">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
                     <?php if(isAdmin()) : ?>
                         <li><a href="user_management.php">User Management</a></li>
@@ -165,6 +168,7 @@ $movies = getMoviesByCategory($user_id, $category);
                 <li><a href="home.php#about-section">About</a></li>
                 <li><a href="watchList.php">WatchList</a></li>
                 <li><a href="explore.php">Explore</a></li>
+                <li><a href="statistics.php">Statistics</a></li>
                 <li><a href="help.php">Help</a></li>
                 <?php if(isAdmin()) : ?>
                     <li><a href="user_management.php">User Management</a></li>
