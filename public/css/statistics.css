@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
+@font-face {
+    font-family: 'Lucky Bones';
+    src: url('../../Luckybones-Bold.ttf') format('truetype'); 
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+.section1 {
+    min-height: 100vh;
+    background-color: #8a707e;
+    background-size: cover;
+    background-repeat: repeat;
+}
+.navbar {
+    position: fixed;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    padding: 0px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+.logo-img {
+    width: 80px;
+    height: auto; 
+}
+header ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dropdown_menu ul {
+    margin-top: 10px;
+}
+.navbar ul li,
+.dropdown_menu li {
+    list-style: none;
+    margin-left: 20px;
+    z-index: 1000;
+}
+.navbar ul li a,
+.dropdown_menu li a {
+    text-decoration: none;
+    padding: 6px 15px;
+    color: #fff;
+    border-radius: 20px;
+    z-index: 1001;
+}
+.navbar ul li a:hover, 
+.navbar ul li a.active {
+    background-color: #fff !important;
+    color: #57648C !important;
+}
+.navbar .toggle_btn {
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+}
+/* DROPDOWN MENU */
+.dropdown_menu {
+    display: none;
+    position: fixed;
+    right: 2rem; 
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10000;
+}
+.dropdown_menu.open {
+    height: auto;
+    max-height: 600px;
+}
+.dropdown_menu li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dropdown_menu li a:hover {
+    background-color: #fff !important;
+    color: #57648C !important;
+}
+/* RESPONSIVE NAV BAR */
+@media(max-width: 1110) {
+    .navbar .links {
+        display: none;
+    }
+    .navbar .toggle_btn {
+        display: block;
+    }
+    .dropdown_menu {
+        display: block;
+    }
+    .popcorn {
+        display: none;
+    }
+}
+@media(max-width: 576px) {
+    .dropdown_menu {
+        left: 2rem;
+        width: unset;
+    }
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #8a707e;
+}
+
+.continut {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-top: 100px;
+    transform: translateX(-50%);
+    left: 50%;
+}
+
+.title h1 {
+    font-family: 'Lucky Bones';
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+    text-align: left;
+    margin: 10px 0 20px 0;
+}
+
+@media(max-width: 576px) {
+    .title h1 {
+        font-family: 'Lucky Bones';
+        font-size: 24px;
+    }
+}
+
+.container {
+    width: 90%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow-x: auto;
+    display:flex;
+    justify-content: space-evenly;
+}
+.chart-container{
+    width: 80%;
+    position: relative;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #C2B4D6;
+    color: black;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    color: rgb(73, 73, 73);
+    background-color: #C2B4D6;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #988da8;
+    color: #fff;
+}
+
+/* Responsive table and buttons */
+@media (max-width: 768px) {
+    th, td {
+        padding: 8px;
+    }
+
+    .button {
+        padding: 6px 10px;
+        font-size: 14px;
+        margin: 3px 0;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .title h1 {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 576px) {
+    th, td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    th {
+        text-align: left;
+        padding-left: 10px;
+        background-color: #C2B4D6;
+    }
+
+    th::before, td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: calc(50% - 20px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bold;
+    }
+
+    th, td {
+        padding-left: 10px;
+        text-align: left;
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+        text-align: center;
+    }
+}

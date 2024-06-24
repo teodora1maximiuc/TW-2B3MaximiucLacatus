@@ -31,6 +31,7 @@
     }
 
     $lineChartLabels = array_keys($durationMap);
+    sort($lineChartLabels, SORT_NUMERIC);
     $lineChartData = array_values($durationMap);
 
 ?>
@@ -42,9 +43,10 @@
     <meta charset="UTF-8">
     <title>FilmQuest</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="css/user_management.css">
+    <link rel="stylesheet" type="text/css" href="css/statistics.css">
     <link rel="icon" href="images/tab_logo.png" type="image/x-icon">    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -59,9 +61,9 @@
                     <li><a href="home.php#about-section">About</a></li>
                     <li><a href="watchList.php">WatchList</a></li>
                     <li><a href="explore.php">Explore</a></li>
-                    <li><a href="statistics.php">Statistics</a></li>
+                    <li><a href="statistics.php" class="active">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
-                    <li><a href="user_management.php" class="active">User Management</a></li>
+                    <li><a href="user_management.php">User Management</a></li>
                     <?php if(!isset($_SESSION['user_id'])) : ?> 
                         <li><a href="login.php">Login</a></li>
                     <?php else : ?>
@@ -80,9 +82,9 @@
                     <li><a href="home.php#about-section">About</a></li>
                     <li><a href="watchList.php">WatchList</a></li>
                     <li><a href="explore.php">Explore</a></li>
-                    <li><a href="statistics.php">Statistics</a></li>
+                    <li><a href="statistics.php" class="active">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
-                    <li><a href="user_management.php" class="active">User Management</a></li>
+                    <li><a href="user_management.php">User Management</a></li>
                     <?php if(!isset($_SESSION['user_id'])) : ?> 
                     <li><a href="login.php">Login</a></li>
                     <?php else : ?>
@@ -129,7 +131,7 @@
                 data: {
                     labels: barLabels,
                     datasets: [{
-                        label: '# of Movies',
+                        label: '# of Movies per year',
                         data: barData,
                         borderWidth: 1,
                         backgroundColor: pastelColors
@@ -143,14 +145,14 @@
                     }
                 }
             });
-
+            
             const lineCtx = document.getElementById('lineChart');
             const lineChart = new Chart(lineCtx, {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: <?php echo json_encode($lineChartLabels); ?>,
                     datasets: [{
-                        label: 'Number of Movies',
+                        label: '# of Movies with a duration',
                         data: <?php echo json_encode($lineChartData); ?>,
                         borderColor: pastelColors[1],
                         backgroundColor: pastelColors[1],
@@ -231,15 +233,15 @@
                 document.body.removeChild(a);
             }
             function chartToCSV(chart) {
-            const datasets = chart.data.datasets;
-            const labels = chart.data.labels;
-            let csv = 'Label,Value\n';
-            labels.forEach((label, index) => {
-                datasets.forEach((dataset) => {
-                    csv += `${label},${dataset.data[index]}\n`;
+                const datasets = chart.data.datasets;
+                const labels = chart.data.labels;
+                let csv = 'Label,Value\n';
+                labels.forEach((label, index) => {
+                    datasets.forEach((dataset) => {
+                        csv += `${label},${dataset.data[index]}\n`;
+                    });
                 });
-            });
-            return csv;
+                return csv;
             }
 
             function chartToSVG(chart) {
