@@ -86,10 +86,12 @@
                             <td><?php echo htmlspecialchars($user['last_name']); ?></td>
                             <td><?php echo htmlspecialchars($user['username']); ?></td>
                             <td><?php echo htmlspecialchars($user['email']); ?></td>
-                            <td><?php echo $user['is_admin'] ? 'Admin' : 'User'; ?></td>
+                            <td id="permissions-cell-<?php echo $user['id']; ?>"><?php echo $user['is_admin'] ? 'Admin' : 'User'; ?></td>
                             <td>
                                 <a href="../src/views/remove_user.php?id=<?php echo $user['id']; ?>" class="button">Remove</a>
-                                <a href="../src/views/change_permissions.php?id=<?php echo $user['id']; ?>" class="button">Change Permissions</a>
+                                <a href="javascript:void(0);" onclick="changePermissions(<?php echo $user['id']; ?>)" id="change-permissions-button-<?php echo $user['id']; ?>" class="button">
+                                        <?php echo $user['is_admin'] ? 'Revoke Admin' : 'Grant Admin'; ?>
+                                </a>
                                 <a href="view_watchlist.php?id=<?php echo $user['id']; ?>" class="button">View Watchlist</a>
                             </td>
                         </tr>
@@ -100,6 +102,27 @@
     </div>
 
         <script>
+            /*ajax request */
+            function changePermissions(userId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "../src/views/change_permissions.php?id=" + userId, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            //alert('Permissions changed successfully');
+                            var permissionsCell = document.getElementById('permissions-cell-' + userId);
+                            permissionsCell.innerHTML = response.newPermission ? 'Admin' : 'User';
+                            // Optionally update the button text if needed
+                            var button = document.getElementById('change-permissions-button-' + userId);
+                            button.innerHTML = response.newPermission ? 'Revoke Admin' : 'Grant Admin';
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    }
+                };
+                xhr.send();
+            }
 
             const toggleBtn = document.querySelector('.toggle_btn');
             const toggleBtnIcon = document.querySelector('.toggle_btn i');
