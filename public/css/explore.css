@@ -165,6 +165,10 @@ header ul {
     border-radius: 20px;
     margin-bottom: 10px;
 }
+.filters {
+    display:flex;
+    flex-wrap: wrap;
+}
 .filter-dropdowns {
     display: flex;
     align-items: center;
@@ -187,7 +191,6 @@ header ul {
     cursor: pointer;
     border: none;
     background-color: #e5e5e5;
-    padding: 0.5em 1em;
     border-radius: 5px;
 }
 
@@ -484,9 +487,6 @@ header ul {
         flex-direction: column;
         align-items: flex-start;
     }
-    .filter-bar select {
-        margin-bottom: 20px;
-    }
     .filter-radios {
         width: 100%;
     }
@@ -513,6 +513,7 @@ header ul {
     margin: 10% auto;
     padding: 20px;
     border-radius: 10px;
+    max-width: 600px;
     max-height: 90%;
 }
 

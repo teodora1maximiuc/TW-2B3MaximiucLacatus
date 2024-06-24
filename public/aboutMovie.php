@@ -79,6 +79,7 @@ if ($movieData && isset($movieData['credits']['cast'])) {
                 <div class="movie-details">
                     <h2 id="movie-title">Movie Title</h2>
                     <p id="movie-description">Description of the movie.</p>
+                    <p id="movie-rating"><i class="fas fa-star" style="color: gold;"></i> Rating: </p>
                 </div>
             </div>
             <div class="Actors">
@@ -94,6 +95,9 @@ if ($movieData && isset($movieData['credits']['cast'])) {
                     <h3>Box Office Performance</h3>
                     <div class="chart" id="box-office-performance">
                         <canvas id="boxOfficeChart"></canvas> 
+                        <button id="exportBoxSVG">Export as SVG</button>
+                        <button id="exportBoxWebP">Export as WebP</button>
+                        <button id="exportBoxCSV">Export as CSV</button>
                     </div>
                 </div>
                 <div class="Genres">
@@ -126,6 +130,8 @@ if ($movieData && isset($movieData['credits']['cast'])) {
             document.getElementById('movie-title').textContent = data.title;
             document.getElementById('movie-image').src = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
             document.getElementById('movie-description').textContent = data.overview;
+            const ratingElement = document.getElementById('movie-rating');
+            ratingElement.innerHTML = `<i class="fas fa-star"></i> Rating: ${data.vote_average}`;
 
             const actorsContainer = document.getElementById('actors-container');
             actorsContainer.innerHTML = '';
@@ -185,6 +191,31 @@ if ($movieData && isset($movieData['credits']['cast'])) {
                     }
                 }
             });
+            document.getElementById('exportBoxSVG').onclick = function () {
+                const ctx = document.getElementById('boxOfficeChart');
+                const chart = Chart.getChart(ctx);
+                if (chart) {
+                    const svg = chartToSVG(chart);
+                    const blob = new Blob([svg], { type: 'image/svg+xml' });
+                    const url = URL.createObjectURL(blob);
+                    downloadFile(url, 'box_office_chart.svg');
+                }
+            };
+
+            document.getElementById('exportBoxWebP').onclick = function () {
+                const canvas = document.querySelector('#boxOfficeChart');
+                canvas.toBlob(function (blob) {
+                    const url = URL.createObjectURL(blob);
+                    downloadFile(url, 'box_office_chart.webp');
+                }, 'image/webp');
+            };
+
+            document.getElementById('exportBoxCSV').onclick = function () {
+                const csv = chartToCSV(boxOfficeChart);
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                downloadFile(url, 'box_office_chart.csv');
+            };
         }
 
         function createGenresDonutChart(genres) {
@@ -262,6 +293,11 @@ if ($movieData && isset($movieData['credits']['cast'])) {
         }
         
         function chartToSVG(chart) {
+            if (!chart || !chart.data || !chart.data.labels || !chart.data.datasets) {
+                console.error('Invalid chart object');
+                return '';
+            }
+
             const width = chart.width;
             const height = chart.height;
             const labels = chart.data.labels;
@@ -296,8 +332,6 @@ if ($movieData && isset($movieData['credits']['cast'])) {
             svg += `</svg>`;
             return svg;
         }
-
-
         function chartToCSV(chart) {
             const datasets = chart.data.datasets;
             const labels = chart.data.labels;

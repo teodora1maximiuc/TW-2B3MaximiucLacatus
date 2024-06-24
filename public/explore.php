@@ -127,7 +127,7 @@ $data = json_decode($response, true);
     <section class="movies">
         <div class="filter-bar">
             <div class="filter-dropdowns">
-                <form action="" method="get" id="filter-form">
+                <form action="" method="get" id="filter-form" class="filters">
                     <select name="genre" class="genre">
                         <option value="all genres" <?php echo ($genre === 'all genres') ? 'selected' : ''; ?>>All genres</option>
                         <option value="28" <?php echo ($genre === '28') ? 'selected' : ''; ?>>Action</option>
