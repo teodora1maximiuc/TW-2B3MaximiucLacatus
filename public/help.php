@@ -11,6 +11,7 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
     <link rel="stylesheet" type="text/css" href="css/help.css">
     <link href="https://fonts.googleapis.com/css?family=Lucky+Bones&display=swap" rel="stylesheet">
     <link rel="icon" href="images/tab_logo.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <section class="section1">

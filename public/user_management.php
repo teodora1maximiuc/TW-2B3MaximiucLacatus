@@ -66,15 +66,17 @@
             </ul>
         </div>
     <div class="continut">
-    <div class="title">
-        <h1>User Management</h1>
-        <button onclick="uploadFile('import')" class="upload-button">
-            <i class="fas fa-upload"></i> Add Users
-        </button>
-        <button onclick="uploadFile('remove')" class="upload-button">
-            <i class="fas fa-trash-alt"></i> Remove Users
-        </button>
-    </div>
+        <div class="title-buttons-container">
+            <div class="title">
+                <h1>User Management</h1>
+                <button onclick="uploadFile('import')" class="upload-button">
+                    <i class="fas fa-upload"></i> Add Users
+                </button>
+                <button onclick="uploadFile('remove')" class="upload-button">
+                    <i class="fas fa-trash-alt"></i> Remove Users
+                </button>
+            </div>
+        </div>
         <div class="container">
             
             <table class="table">

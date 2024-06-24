@@ -27,8 +27,8 @@
     z-index: 1000;
 }
 .logo-img {
-    width: 80px;
-    height: auto; 
+    width: 65px;
+    height: 65px; 
 }
 header ul {
     display: flex;
@@ -87,7 +87,7 @@ header ul {
     background-color: #fff !important;
     color: #57648C !important;
 }
-@media(max-width: 992px) {
+@media(max-width: 1110px) {
     .navbar .links {
         display: none;
     }

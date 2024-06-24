@@ -27,8 +27,8 @@
     z-index: 1000;
 }
 .logo-img {
-    width: 80px;
-    height: auto; 
+    width: 65px;
+    height: 65px; 
 }
 header ul {
     display: flex;
@@ -93,7 +93,7 @@ header ul {
     color: #57648C !important;
 }
 /* RESPONSIVE NAV BAR */
-@media(max-width: 992px) {
+@media(max-width: 1110px) {
     .navbar .links {
         display: none;
     }
@@ -122,10 +122,9 @@ body {
 .continut {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     padding-top: 100px;
-    padding-left: 50px; 
 }
 
 .title h1 {
@@ -136,8 +135,17 @@ body {
     text-align: left;
     margin: 10px 0 20px 0;
 }
+.title-buttons-container {
+    display: flex;
+    justify-content: flex-start; /* Align items to the start */
+    align-items: center;
+    width: 90%;
+}
 
 @media(max-width: 576px) {
+    table th, table td {
+        font-size: 12px;
+    }
     .title h1 {
         font-family: 'Lucky Bones';
         font-size: 24px;

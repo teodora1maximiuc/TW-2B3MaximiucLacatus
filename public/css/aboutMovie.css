@@ -27,8 +27,8 @@
     z-index: 1000;
 }
 .logo-img {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px; 
 }
 header ul {
     display: flex;
@@ -188,7 +188,7 @@ header ul {
     margin-right: 5px;
 }
 /* RESPONSIVE NAV BAR */
-@media(max-width: 992px) {
+@media(max-width: 1110px) {
     .navbar .links {
         display: none;
     }

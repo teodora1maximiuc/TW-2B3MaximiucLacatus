@@ -64,7 +64,7 @@ if (!isset($_SESSION['user_id'])) {
                 <ul class="links">
                     <li><a href="home.php">Home</a></li>
                     <li><a href="home.php#about-section">About</a></li>
-                    <li><a href="watchList.php">WatchList</a></li>
+                    <li><a href="watchList.php" class="active">WatchList</a></li>
                     <li><a href="explore.php">Explore</a></li>
                     <li><a href="statistics.php">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
@@ -79,7 +79,7 @@ if (!isset($_SESSION['user_id'])) {
             <ul>
                 <li><a href="home.php">Home</a></li>
                 <li><a href="home.php#about-section">About</a></li>
-                <li><a href="watchList.php">WatchList</a></li>
+                <li><a href="watchList.php" class="active">WatchList</a></li>
                 <li><a href="explore.php">Explore</a></li>
                 <li><a href="statistics.php">Statistics</a></li>
                 <li><a href="help.php">Help</a></li>
@@ -148,7 +148,7 @@ $movies = getMoviesByCategory($user_id, $category);
                 <ul class="links">
                     <li><a href="home.php">Home</a></li>
                     <li><a href="home.php#about-section">About</a></li>
-                    <li><a href="watchList.php">WatchList</a></li>
+                    <li><a href="watchList.php" class="active">WatchList</a></li>
                     <li><a href="explore.php">Explore</a></li>
                     <li><a href="statistics.php">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
@@ -166,7 +166,7 @@ $movies = getMoviesByCategory($user_id, $category);
             <ul>
                 <li><a href="home.php">Home</a></li>
                 <li><a href="home.php#about-section">About</a></li>
-                <li><a href="watchList.php">WatchList</a></li>
+                <li><a href="watchList.php" class="active">WatchList</a></li>
                 <li><a href="explore.php">Explore</a></li>
                 <li><a href="statistics.php">Statistics</a></li>
                 <li><a href="help.php">Help</a></li>
