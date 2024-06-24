@@ -673,20 +673,20 @@ header ul {
 }
 .watch-movie-button {
     display: inline-block;
-    background-color: #e50914; /* Netflix red */
+    background-color: #e50914;
     color: white;
-    padding: 8px 15px; /* Adjusted padding to match other buttons */
+    padding: 8px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-decoration: none; 
     text-align: center; 
-    font-size: 14px; /* Adjusted font size to match other buttons */
+    font-size: 14px; 
 }
 
 .watch-movie-button:hover {
-    background-color: #b20710; /* Darker red for hover */
+    background-color: #b20710;
 }
 
 
