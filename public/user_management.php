@@ -18,7 +18,8 @@
     <title>FilmQuest</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="css/user_management.css">
-    <link rel="icon" href="images/tab_logo.png" type="image/x-icon">    
+    <link rel="icon" href="images/tab_logo.png" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
 </head>
 
 <body>
@@ -49,17 +50,17 @@
         <div class="dropdown_menu">
             <ul>
             <li>
-                    <li><a href="home.php">Home</a></li>
-                    <li><a href="home.php#about-section">About</a></li>
-                    <li><a href="watchList.php">WatchList</a></li>
-                    <li><a href="explore.php">Explore</a></li>
-                    <li><a href="help.php">Help</a></li>
-                    <li><a href="user_management.php" class="active">User Management</a></li>
-                    <?php if(!isset($_SESSION['user_id'])) : ?> 
-                    <li><a href="login.php">Login</a></li>
-                    <?php else : ?>
-                        <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
-                    <?php endif; ?>
+                <li><a href="home.php">Home</a></li>
+                <li><a href="home.php#about-section">About</a></li>
+                <li><a href="watchList.php">WatchList</a></li>
+                <li><a href="explore.php">Explore</a></li>
+                <li><a href="help.php">Help</a></li>
+                <li><a href="user_management.php" class="active">User Management</a></li>
+                <?php if(!isset($_SESSION['user_id'])) : ?> 
+                <li><a href="login.php">Login</a></li>
+                <?php else : ?>
+                    <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
+                <?php endif; ?>
             </ul>
         </div>
     <div class="continut">
@@ -74,7 +75,7 @@
     </div>
         <div class="container">
             
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th>First Name</th>
@@ -82,10 +83,10 @@
                         <th>Username</th>
                         <th>Email</th>
                         <th>Permissions</th>
-                        <th>Actions</th>
+                        <th class="Actions">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="buttons">
                     <?php foreach ($users as $user): ?>
                         <tr id="user-row-<?php echo $user['id']; ?>">
                             <td><?php echo htmlspecialchars($user['first_name']); ?></td>
@@ -108,7 +109,6 @@
     </div>
 
         <script>
-            /*functie pt upload fisiere*/
             function uploadFile(action) {
                 var input = document.createElement('input');
                 input.type = 'file';
@@ -140,14 +140,14 @@
 
             function updateTable() {
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'user_management.php', true); // Reload the current page to refresh the table
+                xhr.open('GET', 'user_management.php', true);
                 xhr.onload = function() {
                     if (xhr.status === 200) {
                         var parser = new DOMParser();
                         var newDoc = parser.parseFromString(xhr.responseText, 'text/html');
                         var newTable = newDoc.querySelector('table tbody');
                         var currentTable = document.querySelector('table tbody');
-                        currentTable.innerHTML = newTable.innerHTML; // Replace current table content with updated content
+                        currentTable.innerHTML = newTable.innerHTML; 
                     } else {
                         alert('Error updating table');
                     }
