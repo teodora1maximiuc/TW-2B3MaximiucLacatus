@@ -103,7 +103,6 @@
                                 <a href="javascript:void(0);" onclick="changePermissions(<?php echo $user['id']; ?>)" id="change-permissions-button-<?php echo $user['id']; ?>" class="button">
                                         <?php echo $user['is_admin'] ? 'Revoke Admin' : 'Grant Admin'; ?>
                                 </a>
-                                <a href="view_watchlist.php?id=<?php echo $user['id']; ?>" class="button">View Watchlist</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
