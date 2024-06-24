@@ -320,10 +320,20 @@
         let currentPage = 1;
         let totalPages = 10;
 
+<<<<<<< Updated upstream
         function performSearch() {
             const searchInput = document.getElementById('searchInput').value.trim();
             const searchUrl = 'explore.php?title=' + encodeURIComponent(searchInput);
             window.location.href = searchUrl;
+=======
+    $(document).on('click', '.modal .close', function() {
+        closeModal();
+    });
+    $(window).on('click', function(event) {
+        const modal = $('#movieModal');
+        if (event.target == modal[0]) {
+            closeModal();
+>>>>>>> Stashed changes
         }
 
         document.querySelector('.search-btn').addEventListener('click', performSearch);
@@ -514,3 +524,296 @@
 
 </body>
 </html>
+
+
+<!-- <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once __DIR__ . '/../src/helpers/session_helper.php';
+include_once __DIR__ . '/../config/config.php';
+
+$apiKey = '0136e68e78a0433f8b5bdcec484af43c';
+$searchQuery = isset($_GET['query']) ? $_GET['query'] : '';
+$genre = isset($_GET['genre']) ? $_GET['genre'] : 'all genres';
+$year = isset($_GET['year']) ? $_GET['year'] : 'all years';
+$title = isset($_GET['title']) ? $_GET['title'] : '';
+$actor = isset($_GET['actor']) ? $_GET['actor'] : '';
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$moviesPerPage = 10;
+$offset = ($page - 1) * $moviesPerPage;
+
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+
+    $sql = "SELECT * FROM movies WHERE 1=1";
+    $params = [];
+
+    if ($genre !== 'all genres') {
+        $sql .= " AND listed_in LIKE :genre";
+        $params[':genre'] = '%' . $genre . '%';
+    }
+    if ($year !== 'all years') {
+        if (strpos($year, '-') !== false) {
+            list($startYear, $endYear) = explode('-', $year);
+            $sql .= " AND release_year BETWEEN :startYear AND :endYear";
+            $params[':startYear'] = $startYear;
+            $params[':endYear'] = $endYear;
+        } else {
+            $sql .= " AND release_year = :year";
+            $params[':year'] = $year;
+        }
+    }
+    if (!empty($searchQuery)) {
+        $sql .= " AND title LIKE :searchQuery";
+        $params[':searchQuery'] = '%' . $searchQuery . '%';
+    }
+    if (!empty($title)) {
+        $sql .= " AND title LIKE :title";
+        $params[':title'] = '%' . $title . '%';
+    }
+    if (!empty($actor)) {
+        $sql .= " AND cast LIKE :actor";
+        $params[':actor'] = '%' . $actor . '%';
+    }
+    $sql .= " LIMIT :limit OFFSET :offset";
+    $stmt = $pdo->prepare($sql);
+
+    foreach ($params as $key => &$val) {
+        $stmt->bindParam($key, $val);
+    }
+    $stmt->bindParam(':limit', $moviesPerPage, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT); 
+
+    $stmt->execute();
+    $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        die();
+    }
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FilmQuest</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="css/explore.css">
+    <link rel="icon" href="images/tab_logo.png" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<section class="section1">
+    <header>
+        <div class="navbar">
+            <a href="#" class="logo">
+                <img src="images/logo.png" alt="FilmQuest Logo" class="logo-img">
+            </a>
+            <span class="title-responsive"> Explore </span>
+            <ul class="links">
+                <li><a href="home.php">Home</a></li>
+                <li><a href="home.php#about-section">About</a></li>
+                <li><a href="watchList.php">WatchList</a></li>
+                <li><a href="explore.php" class="active">Explore</a></li>
+                <li><a href="statistics.php">Statistics</a></li>
+                <li><a href="help.php">Help</a></li>
+                <?php if(isAdmin()) : ?>
+                    <li><a href="user_management.php">User Management</a></li>
+                <?php endif; ?>
+                <?php if(!isset($_SESSION['user_id'])) : ?> 
+                <li><a href="login.php">Login</a></li>
+                <?php else : ?>
+                    <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
+                <?php endif; ?>
+            </ul>
+            <div class="toggle_btn">
+                <i class="fa-solid fa-bars" style="color: #fff;"></i>
+            </div>
+        </div>
+    </header>
+    <div class="dropdown_menu">
+        <ul>
+            <li><a href="home.php">Home</a></li>
+            <li><a href="home.php#about-section">About</a></li>
+            <li><a href="watchList.php">WatchList</a></li>
+            <li><a href="explore.php" class="active">Explore</a></li>
+            <li><a href="statistics.php">Statistics</a></li>
+            <li><a href="help.php">Help</a></li>
+            <?php if(isAdmin()) : ?>
+                <li><a href="user_management.php">User Management</a></li>
+            <?php endif; ?>
+            <?php if(!isset($_SESSION['user_id'])) : ?> 
+            <li><a href="login.php">Login</a></li>
+            <?php else : ?>
+                <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
+            <?php endif; ?>
+        </ul>
+    </div>
+    <section class="banner">
+        <div class="banner-card">
+            <a href="aboutMovie.html"><img src="images/scenetaste.jpg_large" class="banner-img" alt=""></a>
+        </div>
+        <div class="card-content">
+            <div class="card-info">
+                <div class="genre">
+                    <span>History/Romance/Drama </span>
+                </div>
+                <div class="year">
+                    <span> 2023 </span>
+                </div>
+                <div class="duration">
+                    <span> 2h 16m </span>
+                </div>
+            </div>
+            <h2 class="card-title">The Taste Of Things</h2>
+        </div>
+    </section>
+    <section class="movies">
+        <div class="filter-bar">
+            <div class="filter-dropdowns">
+                <form action="" method="get" id="filter-form" class="filters">
+                    <select name="genre" class="genre">
+                        <option value="all genres" <?php echo ($genre === 'all genres') ? 'selected' : ''; ?>>All genres</option>
+                        <option value="Animation" <?php echo ($genre === 'Animation') ? 'selected' : ''; ?>>Animation</option>
+                        <option value="Action" <?php echo ($genre === 'Action') ? 'selected' : ''; ?>>Action</option>
+                        <option value="Adventure" <?php echo ($genre === 'Adventure') ? 'selected' : ''; ?>>Adventure</option>
+                        <option value="Comedy" <?php echo ($genre === 'Comedy') ? 'selected' : ''; ?>>Comedy</option>
+                        <option value="Crime" <?php echo ($genre === 'Crime') ? 'selected' : ''; ?>>Crime</option>
+                        <option value="Documentary" <?php echo ($genre === 'Documentary') ? 'selected' : ''; ?>>Documentary</option>
+                        <option value="Drama" <?php echo ($genre === 'Drama') ? 'selected' : ''; ?>>Drama</option>
+                        <option value="Fantasy" <?php echo ($genre === 'Fantasy') ? 'selected' : ''; ?>>Fantasy</option>
+                        <option value="Romance" <?php echo ($genre === 'Romance') ? 'selected' : ''; ?>>Romance</option>
+                    </select>
+                    <select name="year" class="year">
+                        <option value="all years" <?php echo ($year === 'all years') ? 'selected' : ''; ?>>All years</option>
+                        <option value="2024" <?php echo ($year === '2024') ? 'selected' : ''; ?>>2024</option>
+                        <option value="2023" <?php echo ($year === '2023') ? 'selected' : ''; ?>>2023</option>
+                        <option value="2022" <?php echo ($year === '2022') ? 'selected' : ''; ?>>2022</option>
+                        <option value="2021" <?php echo ($year === '2021') ? 'selected' : ''; ?>>2021</option>
+                        <option value="2020" <?php echo ($year === '2020') ? 'selected' : ''; ?>>2020</option>
+                        <option value="2010-2020" <?php echo ($year === '2010-2020') ? 'selected' : ''; ?>>2010-2020</option>
+                        <option value="2000-2010" <?php echo ($year === '2000-2010') ? 'selected' : ''; ?>>2000-2010</option>
+                        <option value="1990-2000" <?php echo ($year === '1990-2000') ? 'selected' : ''; ?>>1990-2000</option>
+                    </select>
+                    <div class="search">
+                        <input type="text" name="query" class="input" placeholder="Search by title, actor" value="<?php echo htmlspecialchars($searchQuery); ?>">
+                        <button type="submit" class="button">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="movies-grid">
+            <?php
+            foreach ($movies as $movie) {
+                $title = htmlspecialchars($movie['title']);
+                $releaseYear = htmlspecialchars($movie['release_year']);
+                $genre = htmlspecialchars($movie['listed_in']);
+                $duration = htmlspecialchars($movie['duration']);
+                $movieId = htmlspecialchars($movie['api_id']);
+                $tmdbApiUrl = "https://api.themoviedb.org/3/search/movie?api_key={$apiKey}&query=" . urlencode($title);
+                $tmdbResponse = file_get_contents($tmdbApiUrl);
+                $tmdbData = json_decode($tmdbResponse, true);
+                $posterPath = $tmdbData['results'][0]['poster_path'] ?? null;
+                $posterUrl = $posterPath ? "https://image.tmdb.org/t/p/w500" . $posterPath : 'images/no_poster_available.jpg';
+            ?>
+            <div class="movie-card">
+                <div class="movie-id" style="display: none;"><?php echo $movieId?></div>
+                <div class="card-head">
+                    <img src="<?php echo $posterUrl; ?>" alt="<?php echo $title; ?>" class="card-img">
+                    <div class="card-overlay">
+                        <div class="rating"><i class="fa-solid fa-star" style="color: #f9cc6c;"></i><span>9.5</span></div>
+                        <div class="addWatchList"><i class="fa-solid fa-info-circle" style="color: #fff;"></i></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title"><?php echo $title; ?></h3>
+                    <div class="card-info"><span class="year"><?php echo $releaseYear; ?></span></div>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
+        </div>
+        <div class="see-more-btn">
+            <button id="seeMoreButton" class="seeMoreButton" onclick="loadMore()">See More</button>
+        </div>
+    </section>
+</section>
+<div id="movieModal" class="modal">
+    <div class="modal-content">
+        <div class="trailer">
+            <iframe id="modalTrailer" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="modal-details">
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalYear"></p>
+                <p id="modalDescription"></p>
+                <a href="aboutMovie.php" id="modalStatisticLink">Statistic</a>
+            </div>
+        </div>
+        <span class="close">&times;</span>
+    </div>
+    <input type="hidden" id="modalMovieId"> 
+</div>
+<script>
+    var currentPage = <?php echo $page; ?>; 
+
+    $(document).ready(function() {
+    function showModal(title, releaseYear, description, movieId) {
+        const modal = $('#movieModal');
+        modal.find('.modal-content #modalTitle').text(title);
+        modal.find('.modal-content #modalYear').text(`Year: ${releaseYear}`);
+        modal.find('.modal-content #modalDescription').text(description);
+        $('#modalMovieId').val(movieId);
+        $('#modalStatisticLink').attr('href', 'aboutMovie.php?id=' + movieId); 
+        modal.css('display', 'block');
+    }
+    $(document).on('click', '.movie-card', function() {
+        const movieTitle = $(this).find('.card-title').text().trim();
+        const releaseYear = $(this).find('.year').text().trim();
+        const description = ''; 
+        const movieId = $(this).find('.movie-id').text().trim();
+        showModal(movieTitle, releaseYear, description, movieId);
+    });
+    function closeModal() {
+        $('#movieModal').css('display', 'none');
+        $('#modalTrailer').attr('src', ''); 
+    }
+    $(document).on('click', '.modal .close', function() {
+        closeModal();
+    });
+
+    $(window).on('click', function(event) {
+        const modal = $('#movieModal');
+        if (event.target == modal[0]) {
+            closeModal();
+        }
+    });
+});
+
+
+    function loadMore() {
+        currentPage++; 
+
+        $.ajax({
+            url: 'load_more.php',
+            type: 'GET',
+            data: $('#filter-form').serialize() + '&page=' + currentPage,
+            success: function(response) {
+                console.log('Response:', response);
+                $('.movies-grid').append(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error loading more movies:', error);
+            }
+        });
+    }
+</script>
+
+</body>
+</html> -->
