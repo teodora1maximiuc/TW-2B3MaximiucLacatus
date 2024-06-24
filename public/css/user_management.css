@@ -137,7 +137,7 @@ body {
 }
 .title-buttons-container {
     display: flex;
-    justify-content: flex-start; /* Align items to the start */
+    justify-content: flex-start;
     align-items: center;
     width: 90%;
 }

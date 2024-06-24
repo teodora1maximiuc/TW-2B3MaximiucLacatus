@@ -19,6 +19,7 @@ class User{
         return $row ? $row : false;
     }
 
+    /*se introduce noul utiliator in baza de date */
     public function register($data){
         try {
             $stmt = $this->pdo->prepare('INSERT INTO users (first_name, last_name, email, username, pwd, is_admin) VALUES(:first_name, :last_name, :email, :username, :pwd, :is_admin)');
@@ -32,9 +33,9 @@ class User{
             ]);
     
             if ($stmt->rowCount() > 0) {
-                return true;  // Registration successful
+                return true;  
             } else {
-                return false; // No rows affected; registration failed
+                return false;
             }
         } catch(PDOException $e) {
             error_log('Registration Error: ' . $e->getMessage()); 
@@ -42,6 +43,7 @@ class User{
         }
     }
 
+    /*se verifica username si parola */
     public function login($nameOrEmail, $pwd){
         $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email OR username = :username');
         $stmt->bindValue(':email', $nameOrEmail);

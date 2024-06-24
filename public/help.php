@@ -1,6 +1,6 @@
 <?php
-session_start();
-include_once __DIR__ . '/../src/helpers/session_helper.php';
+    session_start();
+    include_once __DIR__ . '/../src/helpers/session_helper.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@ include_once __DIR__ . '/../src/helpers/session_helper.php';
                         <li><a href="user_management.php">User Management</a></li>
                     <?php endif; ?>
                     <?php if(!isset($_SESSION['user_id'])) : ?> 
-                    <li><a href="login.php">Login</a></li>
+                        <li><a href="login.php">Login</a></li>
                     <?php else : ?>
                         <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
                     <?php endif; ?>

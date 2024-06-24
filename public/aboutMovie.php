@@ -24,7 +24,7 @@ if ($movieData && isset($movieData['credits']['cast'])) {
     <link rel="stylesheet" type="text/css" href="css/aboutMovie.css">
     <link rel="icon" href="images/tab_logo.png" type="image/x-icon">
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>

@@ -59,7 +59,7 @@
                 <li><a href="help.php">Help</a></li>
                 <li><a href="user_management.php" class="active">User Management</a></li>
                 <?php if(!isset($_SESSION['user_id'])) : ?> 
-                <li><a href="login.php">Login</a></li>
+                    <li><a href="login.php">Login</a></li>
                 <?php else : ?>
                     <li><a href="../src/controllers/Users.php?q=logout">Logout</a></li>
                 <?php endif; ?>
@@ -113,6 +113,7 @@
     </div>
 
         <script>
+            /*import fisiere csv si json */
             function uploadFile(action) {
                 var input = document.createElement('input');
                 input.type = 'file';
@@ -128,7 +129,6 @@
                         if (xhr.status === 200) {
                             var response = JSON.parse(xhr.responseText);
                             if (response.success) {
-                                //location.reload(); 
                                 updateTable();
                             } else {
                                 alert('Error: ' + response.message);
@@ -141,7 +141,8 @@
                 };
                 input.click();
             }
-
+            
+            /*update pagina fara reload folosind ajax */
             function updateTable() {
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', 'user_management.php', true);

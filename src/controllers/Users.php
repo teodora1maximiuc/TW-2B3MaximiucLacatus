@@ -18,6 +18,7 @@ class Users {
         $this->pdo = $pdo;
     }
 
+    /*inregistrarea unui utilizator nou */
     public function register(){
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $data = [
@@ -31,42 +32,38 @@ class Users {
 
         $errors = [];
 
+        /*se verifica ca toate campurile sunt completate */
         if(empty($data['first_name']) || empty($data['last_name']) ||empty($data['username']) || empty($data['email']) ||  empty($data['pwd'])){
             flash("register", "Please fill all the inputs");
             redirect(BASE_URL . 'public/login.php?form=register');
-            //$errors[] = "Please fill all the inputs";
             return;
         }
-
+        /*se verifica daca se folosesc caractere invalide in nume */
         if(!preg_match("/^[a-zA-Z]*$/", $data['first_name']) || !preg_match("/^[a-zA-Z]*$/", $data['last_name'])){
             flash("register", "Invalid characters");
             redirect(BASE_URL . 'public/login.php?form=register');
-            //$errors[] = "Invalid characters";
             return;
         }
-
+        /*se verifica daca emailul are formatul corect */
         if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)){
             flash("register", "Invalid email");
             redirect(BASE_URL . 'public/login.php?form=register');
-            //$errors[] = "Invalid email";
             return;
         }
-
+        /*se verifica daca parola are cel putin 6 caractere */
         if(strlen($data['pwd']) < 6){
             flash("register", "Password must be at least 6 characters");
             redirect(BASE_URL . 'public/login.php?form=register');
-            //$errors[] = "Password must be at least 6 characters";
             return;
         }
-
+        /*se verifica daca exista deja un utilizator cu acelasi username sau email */
         if($this->userModel->findUserByEmailOrUsername($data['email'], $data['username'])){
             flash("register", "Email or username already taken");
             redirect(BASE_URL . 'public/login.php?form=register');
-            //$errors[] = "Email or username already taken";
             return;
         }
 
-        //hash password
+        /*functie hash pt parola*/
         $data['pwd'] = password_hash($data['pwd'], PASSWORD_DEFAULT);
 
         if($this->userModel->register($data)){
@@ -78,6 +75,7 @@ class Users {
         }
     }
 
+    /*logarea unui utilizator */
     public function login(){
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $data = [
@@ -86,12 +84,13 @@ class Users {
             'remember_me' => isset($_POST['remember_me']) ? true : false
         ];
 
+        /*se verifica daca toate campurile sunt completate */
         if(empty($data['username_email']) || empty($data['pwd'])){
             flash("login", "Please fill all the inputs");
             redirect(BASE_URL . 'public/login.php');
             exit();
         }
-
+        /*se cauta utilizatorul in bd */
         if($this->userModel->findUserByEmailOrUsername($data['username_email'], $data['username_email'])){
             $loggedInUser = $this->userModel->login($data['username_email'], $data['pwd']);
             if($loggedInUser){
@@ -107,6 +106,7 @@ class Users {
         
     }
 
+    /*crearea sesiunii pentru utilizator */
     public function createUserSession($user, $rememberMe){
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
@@ -128,6 +128,7 @@ class Users {
         redirect(BASE_URL . 'public/home.php');
     }
 
+    /*delogarea utilizatorului */
     public function logout(){
         session_start();
 
@@ -145,28 +146,28 @@ class Users {
         redirect(BASE_URL . 'public/home.php'); 
     }
 }
-require_once '../../config/config.php';
-$users = new Users($pdo);
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    switch($_POST['type']){
-        case 'register':
-            $users->register();
-            break;
-        case 'login':
-            $users->login();
-            break;
-        default:
-            echo json_encode(['error' => 'Invalid action']);
+    require_once '../../config/config.php';
+    $users = new Users($pdo);
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        switch($_POST['type']){
+            case 'register':
+                $users->register();
+                break;
+            case 'login':
+                $users->login();
+                break;
+            default:
+                echo json_encode(['error' => 'Invalid action']);
+        }
+    }else{
+        switch($_GET['q']){
+            case 'logout':
+                $users->logout();
+                break;
+            default:
+                redirect(BASE_URL . 'public/login.php');
+                
+        }
     }
-}else{
-    switch($_GET['q']){
-        case 'logout':
-            $users->logout();
-            break;
-        default:
-            redirect(BASE_URL . 'public/login.php');
-            
-    }
-}
 
 ?>
