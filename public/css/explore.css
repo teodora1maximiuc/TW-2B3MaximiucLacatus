@@ -671,5 +671,23 @@ header ul {
 .watchlist-dropdown-content a:hover {
     background-color: #f2f2f2;
 }
+.watch-movie-button {
+    display: inline-block;
+    background-color: #e50914; /* Netflix red */
+    color: white;
+    padding: 8px 15px; /* Adjusted padding to match other buttons */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none; 
+    text-align: center; 
+    font-size: 14px; /* Adjusted font size to match other buttons */
+}
+
+.watch-movie-button:hover {
+    background-color: #b20710; /* Darker red for hover */
+}
+
 
 
