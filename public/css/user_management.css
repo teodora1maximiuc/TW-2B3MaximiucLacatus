@@ -251,3 +251,23 @@ tr:hover {
         text-align: center;
     }
 }
+.upload-button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    background-color: #C2B4D6;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    position: relative; 
+}
+.upload-button i {
+    margin-right: 5px;
+}
+
+.upload-button:hover {
+    background-color: #988da8;
+    color: #fff;
+}

@@ -63,9 +63,15 @@
             </ul>
         </div>
     <div class="continut">
-        <div class="title">
-            <h1>User Management</h1>
-        </div>
+    <div class="title">
+        <h1>User Management</h1>
+        <button onclick="uploadFile('import')" class="upload-button">
+            <i class="fas fa-upload"></i> Add Users
+        </button>
+        <button onclick="uploadFile('remove')" class="upload-button">
+            <i class="fas fa-trash-alt"></i> Remove Users
+        </button>
+    </div>
         <div class="container">
             
             <table>
@@ -81,14 +87,14 @@
                 </thead>
                 <tbody>
                     <?php foreach ($users as $user): ?>
-                        <tr>
+                        <tr id="user-row-<?php echo $user['id']; ?>">
                             <td><?php echo htmlspecialchars($user['first_name']); ?></td>
                             <td><?php echo htmlspecialchars($user['last_name']); ?></td>
                             <td><?php echo htmlspecialchars($user['username']); ?></td>
                             <td><?php echo htmlspecialchars($user['email']); ?></td>
                             <td id="permissions-cell-<?php echo $user['id']; ?>"><?php echo $user['is_admin'] ? 'Admin' : 'User'; ?></td>
                             <td>
-                                <a href="../src/views/remove_user.php?id=<?php echo $user['id']; ?>" class="button">Remove</a>
+                                <a href="javascript:void(0);" onclick="removeUser(<?php echo $user['id']; ?>)" class="button">Remove</a>
                                 <a href="javascript:void(0);" onclick="changePermissions(<?php echo $user['id']; ?>)" id="change-permissions-button-<?php echo $user['id']; ?>" class="button">
                                         <?php echo $user['is_admin'] ? 'Revoke Admin' : 'Grant Admin'; ?>
                                 </a>
@@ -102,7 +108,85 @@
     </div>
 
         <script>
-            /*ajax request */
+            /*functie pt upload fisiere*/
+            function uploadFile(action) {
+                var input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.csv, .json';
+                input.onchange = function() {
+                    var file = this.files[0];
+                    var formData = new FormData();
+                    formData.append('file', file);
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '../src/views/' + action + '_users.php', true);
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                //location.reload(); 
+                                updateTable();
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        } else {
+                            alert('Error uploading file');
+                        }
+                    };
+                    xhr.send(formData);
+                };
+                input.click();
+            }
+
+            function updateTable() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'user_management.php', true); // Reload the current page to refresh the table
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        var parser = new DOMParser();
+                        var newDoc = parser.parseFromString(xhr.responseText, 'text/html');
+                        var newTable = newDoc.querySelector('table tbody');
+                        var currentTable = document.querySelector('table tbody');
+                        currentTable.innerHTML = newTable.innerHTML; // Replace current table content with updated content
+                    } else {
+                        alert('Error updating table');
+                    }
+                };
+                xhr.send();
+            }
+
+            /*ajax request pt stergere user*/
+            function removeUser(userId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "../src/views/remove_user.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            try {
+                                var response = JSON.parse(xhr.responseText);
+                                if (response.success) {
+                                    var userRow = document.getElementById('user-row-' + userId);
+                                    if (userRow) {
+                                        userRow.parentNode.removeChild(userRow);
+                                    }
+                                } else {
+                                    alert('Error: ' + response.message);
+                                }
+                            } catch (e) {
+                                console.error('Error parsing JSON response:', e);
+                                alert('Error: Invalid response received from server.');
+                            }
+                        } else {
+                            console.error('Error status:', xhr.status);
+                            alert('Error: Server returned status ' + xhr.status);
+                        }
+                    }
+                };
+                xhr.send("id=" + encodeURIComponent(userId));
+            }
+
+            /*ajax request pt schimb permisiuni*/
             function changePermissions(userId) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "../src/views/change_permissions.php?id=" + userId, true);
@@ -110,10 +194,9 @@
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         var response = JSON.parse(xhr.responseText);
                         if (response.success) {
-                            //alert('Permissions changed successfully');
                             var permissionsCell = document.getElementById('permissions-cell-' + userId);
                             permissionsCell.innerHTML = response.newPermission ? 'Admin' : 'User';
-                            // Optionally update the button text if needed
+                          
                             var button = document.getElementById('change-permissions-button-' + userId);
                             button.innerHTML = response.newPermission ? 'Revoke Admin' : 'Grant Admin';
                         } else {
