@@ -228,7 +228,6 @@ $data = json_decode($response, true);
                 <h2 id="modalTitle"></h2>
                 <p id="modalYear"></p>
                 <p id="modalDescription"></p>
-                <a href="aboutMovie.php" id="modalStatisticLink">Statistic</a>
                 <div class="button-container">
                 <div class="watchlist-dropdown">
                     <button class="watchlist-btn" onclick="toggleWatchlistDropdown(this)">

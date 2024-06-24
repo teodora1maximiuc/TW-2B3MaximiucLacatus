@@ -42,12 +42,13 @@
                         <li><a href="#nav-bar">3.1.1 Bara de navigație </a></li>
                         <li><a href="#login-page">3.1.2 Pagina de autentificare </a></li>
                         <li><a href="#signup-page">3.1.3 Pagina de înregistrare </a></li>
-                       
                         <li><a href="#home-page">3.1.6 Pagina de acasă </a></li>
                         <li><a href="#watchlist">3.1.7 Pagina WatchList</a></li>
                         <li><a href="#help">3.1.8 Pagina de ajutor</a></li>
                         <li><a href="#explore">3.1.9 Pagina Explore</a></li>
+                        <li><a href="#statistics">3.1.10 Pagina de Statistici</a></li>
                         <li><a href="#about">3.1.11 Pagina informativă </a></li>
+                        <li><a href="#user-management">3.1.12 Pagina administratorului</a></li>
                     </ul>
                 </li>
                 <li><a href="#hardware-interface">3.2 Interfața Hardware </a></li>
@@ -97,6 +98,7 @@
         <li><a href="#non-functional">5.Funcționalități pentru protecție și securitate</a>
             <ul>
                 <li><a href="#safety">5.1 Protecția datelor</a></li>
+                 <li><a href="#security">5.2 Securizarea datelor</a></li>
             </ul>
         </li>
     </ul>
@@ -129,7 +131,7 @@
                 studenții menționați în secțiunea de Autori de la Facultatea de 
                 Informatică a Universității Alexandru Ioan Cuza din Iași. 
                 Aceasta are ca scop oferirea unei platforme interactivă și informativă 
-                pentru explorarea și descoperirea diverselor filme si seriale disponibile pe serviciile de streaming Netflix și Disney.
+                pentru explorarea și descoperirea diverselor filme disponibile pe serviciile de streaming Netflix și Disney.
             </p>
         </section>
         <section id="conventions">
@@ -162,7 +164,7 @@
             <h4>1.4 Scopul Produsului</h4>
             <p>
                 Scopul acestui site este de a oferi utilizatorilor o experiență captivantă și 
-                personalizată în explorarea lumii filmelor și a serialelor, facilitând accesul 
+                personalizată în explorarea lumii filmelor, facilitând accesul 
                 la o gamă vastă de informații relevante și variate.
             </p>
         </section>
@@ -190,14 +192,15 @@
             <ul>
                 <li>să se înregistreze pe site.</li>
                 <li>să se autentifice pe site.</li>
-                <li>să își reseteze parola in cazul in care a uitat-o.</li>
-                <li>să consulte pagină "Home" și noutățile disponibile</li>
+                <li>să foloseasă opțiunea de "Remember Me" pentru a rămâne logați chiar și după închiderea aplicației.</li>
+                <li>să consulte pagină "Home" și noutățile disponibile.</li>
                 <li>să acceseze pagina "About" pentru mai multe informații despre aplicația web</li>
-                <li>să acceseze pagina "Explore" pentru a căuta filme și seriale după anumite criterii</li>
+                <li>să acceseze pagina "Explore" pentru a căuta filme și seriale după anumite criterii<li>
                 <li>să acceseze pagina "Help" pentru a beneficia de sfaturi în vederea utilizării aplicației</li>
-                <li>dacă este <b>autentificat</b>, să acceseze pagină "WatchList" și să adauge filme sau seriale în lista de vizionare</li>
+                <li>să acceseze pagina "Statistics" pentru a vizualiza si exporta diverse statistici despre filme</li>
+                <li>dacă este <b>autentificat</b>, să acceseze pagină "WatchList" și să adauge filme în lista de vizionare</li>
                 <li>dacă utilizatorul are rol de <b>admin</b>, acesta poate șterge utilizatori din baza de date</li>
-                <li>dacă utilizatorul are rol de <b>admin</b>, acesta poate adăuga filme sau seriale noi</li>
+                <li>dacă utilizatorul are rol de <b>admin</b>, acesta poate adăuga utilizatori noi</li>
                 <li>dacă utilizatorul are rol de <b>admin</b>, acesta poate modifica filmele sau serialele deja existente</li>
             </ul>
         </section>
@@ -208,16 +211,16 @@
                 <li>utilizatorii autentificați pot fi:</li>
                 <li style="list-style: none">
                     <ul>
-                        <li>orice categorie de oameni care își doresc să caute filme sau seriale 
+                        <li>orice categorie de oameni care își doresc să caute filme 
                             noi după criterii specifice sau care doresc să țină
-                            evidența filmelor/serialelor deja vizionate sau pe care au de gând să le vizioneze.
+                            evidența filmelor deja vizionate sau pe care au de gând să le vizioneze.
                         </li>
                     </ul>
                 </li>
                 <li>
                     utilizatorii neautentificați pot fi:
                     <ul>
-                        <li>orice categorie de oameni care își doresc să caute filme sau seriale 
+                        <li>orice categorie de oameni care își doresc să caute filme  
                             noi după criterii specifice.
                         </li>
                     </ul>
@@ -225,7 +228,7 @@
             </ul>
             <h5>2.3.2 Caracteristici</h5>
             <ul>
-                <li>Utilizatorii care sunt <b> autentificați </b> pot accesa pagina "WatchList", cea de vizualizare și modificare a profilului,
+                <li>Utilizatorii care sunt <b> autentificați </b> pot accesa pagina "WatchList", "Statistics" pentru vizualizarea si exportarea statisticilor despre filme,
                     dar și paginile ce oferă detalii și sfaturi cu privire la aplicație, "About" și "Help", pe lângă cele disponibile și 
                     utilizatorilor neautentificați.
                     Mai mult, aceștia pot să adauge filme sau seriale din pagina "Explore" și în urma căutării din pagina "Home" în lista de vizionare și să le marcheze ca fiind vizionate.
@@ -240,8 +243,8 @@
         <section id="operating-environment">
             <h4>2.4 Mediul de operare</h4>
             <p>
-                Produsul dezvoltat poate fi utilizat pe orice dispozitiv cu un browser web care suportă HTML5, CSS și
-                JavaScript.
+                Produsul dezvoltat poate fi utilizat pe orice dispozitiv cu un browser web care suportă HTML5, CSS,
+                JavaScript și PHP.
             </p>
         </section>
         <section id="documentation">
@@ -265,7 +268,7 @@
                         <li>Aceasta reprezintă meniul de navigare către fiecare pagina a aplicației, prezent pe fiecare
                             pagină totodată.
                         </li>
-                        <li class="pictures" style="list-style: none"><img alt="login" src="images/navbar.png" width=800
+                        <li class="pictures" style="list-style: none"><img alt="login" src="photos/navbar.png" width=800
                         ></li>
                     </ul>
                 </li>
@@ -275,17 +278,15 @@
                         <li>Pagina are rolul de a realiza autentificarea utilizatorilor la MoX.</li>
                         <li>Pentru a se autentifica, utilizatorul trebuie să completeze câmpurile de "username" și
                             "parolă" cu
-                            credențiale <b>valide</b>, urmând să acționeze butonul <b>Sign in</b>.
+                            credențiale <b>valide</b>, urmând să acționeze butonul <b>Log in</b>.
                         </li>
+                        <li>Acesta poate selecta si opțiunea de "Remember Me" pentru a rămâne logat.</li>
                         <li> În cazul în care utilizatorul nu are cont pe site, acesta își poate crea unul prin
                             accesarea pagini de
                             înregistrare, ce se face prin apăsarea butonului <b>Sign Up</b>.
                         </li>
-                        <li> În cazul în care utilizatorul și-a uitat parola, acesta poate să o reseteze selectând
-                            opțiunea de
-                            <b> Forgot your password? </b></li>
                         <li class="pictures" style="list-style: none"><img alt="login" height="400"
-                                                                           src="images/login.png" width=800>
+                                                                           src="photos/login.png" width=800>
                         </li>
                     </ul>
                 </li>
@@ -294,7 +295,7 @@
                     <ul>
                         <li>Pagina oferă funcționalitatea de înregistrare a utilizatorilor, pentru a putea beneficia de
                             toate
-                            funcționalitățile MoX.
+                            funcționalitățile MoX / FilmQuest.
                         </li>
                         <li>Pentru a se înregistra, utilizatorul trebuie să completeze câmpurile <b>Email</b>,
                             <b>First name</b>,
@@ -309,14 +310,14 @@
                             al paginii, pentru a reveni la meniul de autentificare.
                         </li>
                         <li class="pictures" style="list-style: none"><img alt="signup" height="400"
-                                                                           src="images/signin.png" width=800>
+                                                                              src="photos/signin.png" width=800>
                     </ul>
                 </li>
                 <li id="home-page"><b> Pagina de acasă</b></li>
                 <li style="list-style: none">
                     <ul>
                         <li>Pagina are rolul de prezența ultimele noutăți, secțiunea de "About" și de a căuta rapid titluri.</li>
-                        <li class="pictures" style="list-style: none"><img alt="overview" src="images/home.png"
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/home.png"
                                                                            width=800>
                         </li>
                     </ul>
@@ -326,9 +327,9 @@
                     <ul>
                         <li>Pagina oferă posibilitatea de a adăuga filme sau seriale în lista de vizionare, de a le marca
                             ca fiind
-                            vizionate, în curs de vizionare, urmează a fi vizionate, dacă s-a renunțat la ele sau de a le șterge din listă.
+                            vizionate, în curs de vizionare sau urmează a fi vizionate, și de a le șterge din listă.
                         </li>
-                        <li class="pictures" style="list-style: none"><img alt="overview" src="images/watchlist.png"
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/watchlist.png"
                             width=800>
                         </li>
                     </ul>
@@ -337,18 +338,34 @@
                 <li style="list-style: none">
                     <ul>
                         <li>Pagina conține informații despre modul de utilizare și funcționalitățiile aplicației web.</li>
-                        <li class="pictures" style="list-style: none"><img alt="overview" src="images/help.png"
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/help.png"
                                                                            width=800>
                         </li>
                     </ul>
                 <li id="explore"><b>Pagina Explore</b></li>
                 <li style="list-style: none">
                     <ul>
-                        <li>Pagina conține cele mai populare și recent lansate filme sau seriale, sortate după genuri și anul lansării.
-                            De asemenea, utilizatorii au posibilitatea de a căuta filme sau seriale după diverse criterii.
+                        <li>Pagina conține cele mai populare și recent lansate filme, sortate după genuri și anul lansării.
+                            De asemenea, utilizatorii au posibilitatea de a căuta filme după diverse criterii.
                         </li>
-                        <li class="pictures" style="list-style: none"><img alt="overview" src="images/image.webp"
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/explore.png"
                                                                            width=800>
+                    </ul>
+                </li>
+                <li id="statistics"><b>Pagina de Statistici</b></li>
+                <li style="list-style: none">
+                    <ul>
+                        <li>Pagina conține statistici relevante despre filmele disponibile în aplicația FilmQuest. Acestea prezintă informații despre numărul de filme pentru fiecare an și statistici referitoare la durata filmelor. Ambele statistici se pot descărca în trei formate: fișier CSV, fișier WebP și fișier SVG.
+                        </li>
+                        <li>
+                            Utilizatorii vor mai putea vizualiza statistici specifice unui film din pagina explore, accesând pagina de informații a filmului si apăsând pe butonul de statistică. Aceștia vor fi redirecționați către o pagină a filmului, unde sunt prezentați actorii și statistici despre profitul filmului și procentul de genuri din acesta. De asemenea, și acestea sunt disponibile spre a fi exportate ca fișiere CSV, SVG sau WebP.
+                        </li>
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/stat1.png"
+                                                                           width=800></li>
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/stat15.png"
+                                                                           width=800></li>
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/stat2.png"
+                                                                           width=800></li>
                     </ul>
                 </li>
                 <li id="about"><b>Pagina informativa "About"</b></li>
@@ -356,8 +373,8 @@
                     <ul>
                         <li>Pagina are rolul de a introduce site-ul MoX(FilmQuest) pe scurt, prin menționarea scopului aplicației.
                         </li>
-                        <li class="pictures" style="list-style: none"><img alt="overview" src="images/about.png"
-                            width=800>
+                        <li class="pictures" style="list-style: none"><img alt="overview" src="photos/ab.png"
+                            width=800></li>
                     </ul>
                 </li>
             </ul>
@@ -372,9 +389,9 @@
             <section id="software-interface">
                 <h4>3.3 Interfața Software</h4>
                 <p>
-                    Cerințele minime de software includ un browser funcțional, compatibil cu HTML5 și cu JavaScript.
-                <h5>Postgres Database</h5>
-                Aceasta reprezintă baza de date în care stocăm informații despre fiecare utilizator, filmele și serialele sale preferate.
+                    Cerințele minime de software includ un browser funcțional, compatibil cu HTML5 și cu JavaScript și PHP.
+                <h5>MySQL Database</h5>
+                Aceasta reprezintă baza de date în care stocăm informații despre fiecare utilizator și filmele sale preferate sau din lista de vizionare.
             </section>
             <section id="communication-interface">
                 <h4>3.4 Interfața de comunicare</h4>
@@ -390,22 +407,17 @@
                     Un utilizator se poate înregistra alegându-și un nume de utilizator, un email, o parola, numele si
                     prenumele.
                     Acesta se poate
-                    autentifica având nevoie doar de numele de utilizator și de parolă.
+                    autentifica având nevoie doar de numele de utilizator sau email și de parolă.
                     <h5 id="management-2">4.1.2 Actualizarea informațiilor</h5>
                     <ul>
                         <li>
                             În momentul în care un utilizator nou este creat, credențialele acestuia sunt introduse în
                             baza de
-                            date. De asemenea, când utilizatorul decide să-și modifice credențialele, noile valori sunt
-                            și ele
-                            actualizate în baza de date.
+                            date.
                         </li>
                     </ul>
                     <h5 id="management-3">4.1.3 Condiții de funcționare</h5>
                     <ul>
-                        <li>
-                            Pentru a-și modifica credențialele utilizatorul, trebuie să fie autentificat.
-                        </li>
                         <li>
                             Pentru a se autentifica, utilizatorul are nevoie de un cont care este înregistrat în baza de
                             date.
@@ -415,18 +427,21 @@
                 <section id="utilizatori">
                     <h4>4.2 Secțiunea de utilizatori</h4>
                     <h5 id="utilizatori-1">4.2.1 Descriere și generalități</h5>
-                    Secțiunea <b>Utilizatori</b> este destinată
+                    Secțiunea <b>User Management</b> este destinată
                     <b>adminului</b>, și aceasta îi oferă posibilitatea
                     de a vizualiza o listă cu toți utilizatorii din
                     baza de date. De asemenea, acesta are posibilitatea
                     de a elimina utilizatori din baza de date, dacă
-                    dorește acest lucru.
+                    dorește acest lucru, dar și de a adaugă unii noi.
                     <h5 id="utilizatori-2">4.2.2 Actualizarea informațiilor</h5>
                     <ul>
                         <li>
                             La apăsarea butonului de ștergere din dreptul fiecărui utilizator, credențialele
                             utilizatorului care a
                             fost selectat, sunt șterse din baza de date.
+                        </li>
+                        <li>
+                            La apăsarea butonului de schimbare a permisiunilor din  dreptul fiecărui uitilizator, administratorul poate acorda sau revoca dreptul de admin.
                         </li>
                     </ul>
                     <h5 id="utilizatori-3">4.2.3 Condiții de funcționare</h5>
@@ -446,20 +461,13 @@
                     această
                     oferă facilități pe care un utilizator normal nu le are. În momentul în care adminul accesează
                     panoul de control,
-                    va putea adaugă/modifică filme și seriale direct de pe platforma. Totodată, acesta este
-                    capabil să șteargă
+                    va putea adaugă/ștearge
                     conturi ale utilizatorilor.
                     <h5 id="administrator-2">4.3.2 Actualizare informațiilor</h5>
                     <ul>
                         <li>
-                            În momentul în care adminul adaugă un film sau serial, informațiile despre
-                            acestea sunt inserate
-                            în baza de
-                            date.
-                        </li>
-                        <li>
-                            În momentul în care adminul modifica un film sau serial, informațiile despre
-                            acestea sunt
+                            În momentul în care adminul adaugă un utilizator nou, informațiile 
+                            acestuia sunt
                             actualizate în baza de
                             date.
                         </li>
@@ -480,7 +488,7 @@
                 <section id="safety">
                     <h4>5.1 Protecția datelor</h4>
                     <p>
-                        Aplicația va asigura confidențialitatea datelor prin intermediul unei criptări.
+                        Aplicația va asigura confidențialitatea datelor prin intermediul criptării parolei.
                     </p>
                 </section>
                 
