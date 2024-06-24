@@ -514,12 +514,13 @@ header ul {
     padding: 20px;
     border-radius: 10px;
     max-width: 600px;
-    max-height: 90%;
+    max-height: 95%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Added box-shadow for better visual */
 }
 
 .trailer {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%; /* 16:9 aspect ratio for the iframe */
     height: 0;
     overflow: hidden;
 }
@@ -548,3 +549,127 @@ header ul {
     text-decoration: none;
     cursor: pointer;
 }
+
+.modal-info {
+    margin-top: 20px; /* Added margin for better spacing */
+}
+
+.modal-info h2 {
+    font-size: 24px; /* Adjusted font size for title */
+    margin-bottom: 10px; /* Added margin for better spacing */
+    color: #333; /* Adjusted color for better readability */
+}
+
+.modal-info h3 {
+    font-size: 18px; /* Adjusted font size for year */
+    color: #888; /* Grey color for the year */
+    margin-bottom: 10px;  /*Added margin for better spacing */
+}
+
+.modal-info p {
+    font-size: 14px; /* Adjusted font size for description */
+    line-height: 1.5; /* Increased line height for readability */
+    color: #555; /* Adjusted color for better readability */
+}
+
+.modal-info .button {
+    display: inline-block;
+    background-color: #a898c6;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none; 
+    text-align: center; 
+}
+
+.modal-info .button:hover {
+    background-color: #8a707e;
+}
+
+.button-container {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.statistic-button {
+    display: inline-block;
+    background-color: #a898c6;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    font-size: 14px;
+}
+
+.statistic-button:hover {
+    background-color: #8a707e;
+}
+
+
+.watchlist-dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px; 
+}
+
+.watchlist-btn {
+    background-color: #a898c6;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    display: flex; 
+    align-items: center; 
+}
+
+.watchlist-btn i {
+    margin-right: 5px;
+}
+
+.watchlist-btn:hover {
+    background-color: #8a707e;
+}
+
+.watchlist-dropdown-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 150px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.watchlist-dropdown.active .watchlist-dropdown-content {
+    display: block;
+}
+
+.watchlist-dropdown-content a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.watchlist-dropdown-content a:hover {
+    background-color: #f2f2f2;
+}
+
+

@@ -7,6 +7,8 @@ require_once '../models/User.php';
 require_once '../helpers/session_helper.php';
 require_once '../../config/config.php';
 
+
+
 class Users {
     private $userModel;
     private $pdo;

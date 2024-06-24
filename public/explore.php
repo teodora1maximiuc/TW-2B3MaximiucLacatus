@@ -3,6 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 include_once __DIR__ . '/../src/helpers/session_helper.php';
+require_once __DIR__ . '/../config/config.php';
 
 $apiKey = '0136e68e78a0433f8b5bdcec484af43c';
 $searchQuery = isset($_GET['query']) ? urlencode($_GET['query']) : '';
@@ -226,9 +227,22 @@ $data = json_decode($response, true);
         <div class="modal-details">
             <div class="modal-info">
                 <h2 id="modalTitle"></h2>
-                <p id="modalYear"></p>
+                <h3 id="modalYear"></h3>
                 <p id="modalDescription"></p>
-                <a href="aboutMovie.php" id="modalStatisticLink">Statistic</a>
+                <div class="button-container">
+                <div class="watchlist-dropdown">
+                    <button class="watchlist-btn" onclick="toggleWatchlistDropdown(this)">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="watchlist-text">Add to Watchlist</span>
+                    </button>
+                    <div class="watchlist-dropdown-content">
+                        <a href="#" onclick="addToWatchlist(this, 'Completed')">Completed</a>
+                        <a href="#" onclick="addToWatchlist(this, 'On Hold')">On Hold</a>
+                        <a href="#" onclick="addToWatchlist(this, 'Plan to Watch')">Plan to Watch</a>
+                    </div>
+                </div>
+                <a href="aboutMovie.php" class="statistic-button" id="modalStatisticLink">Statistic</a>
+                </div>
             </div>
         </div>
         <span class="close">&times;</span>
@@ -237,6 +251,71 @@ $data = json_decode($response, true);
 </div>
 
 <script>
+    $(document).ready(function() {
+    $('.watchlist-btn').click(function(e) {
+        e.preventDefault();
+        $(this).parent().toggleClass('active');
+    });
+    
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.addWatchList').length) {
+            $('.addWatchList').removeClass('active');
+        }
+    });
+});
+
+function toggleWatchlistDropdown(button) {
+    const dropdownContent = $(button).siblings('.watchlist-dropdown-content');
+    dropdownContent.toggle();
+
+    const isOpen = dropdownContent.is(':visible');
+    const icon = $(button).find('i');
+
+    if (isOpen) {
+        icon.removeClass('fa-plus').addClass('fa-check');
+    } else {
+        icon.removeClass('fa-check').addClass('fa-plus');
+    }
+}
+
+function addToWatchlist(link, option) {
+    const selectedOptionText = option;
+    const movieId = $('#modalMovieId').val();
+
+    $.ajax({
+        url: '/TW-2B3MaximiucLacatus/src/views/add_to_watchlist.php',
+        type: 'POST',
+        data: { movie_id: movieId, category: selectedOptionText },
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                alert(response.message);
+                const watchlistButton = $('.watchlist-btn');
+                watchlistButton.find('span.watchlist-text').text(selectedOptionText);
+                watchlistButton.find('i').removeClass('fa-plus').addClass('fa-check');
+                watchlistButton.siblings('.watchlist-dropdown-content').hide();
+            } else {
+                alert(response.message);
+                resetWatchlistButton();
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Error adding movie to watchlist. Please try again later.');
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+function resetWatchlistButton() {
+    const button = $('.watchlist-btn');
+    const icon = button.find('i');
+    const text = button.find('.watchlist-text');
+
+    icon.removeClass('fa-check').addClass('fa-plus');
+    text.text('Add to Watchlist');
+    $('.watchlist-dropdown-content').hide();
+}
+
 $(document).ready(function() {
     let currentPage = 1;
     let totalPages = 10;
@@ -389,7 +468,7 @@ $(document).ready(function() {
     function showModal(title, poster, year, description, movieId) {
         const modal = $('#movieModal');
         modal.find('.modal-content #modalTitle').text(title);
-        modal.find('.modal-content #modalYear').text(`Year: ${year}`);
+        modal.find('.modal-content #modalYear').text(`${year}`);
         modal.find('.modal-content #modalDescription').text(description);
         $('#modalMovieId').val(movieId); 
         $('#modalStatisticLink').attr('href', 'aboutMovie.php?id=' + movieId); 
@@ -398,6 +477,7 @@ $(document).ready(function() {
     function closeModal() {
         $('#movieModal').css('display', 'none');
         $('#modalTrailer').attr('src', '');
+        resetWatchlistButton();
     }
 
     $(document).on('click', '.movie-card', function() {
@@ -410,13 +490,13 @@ $(document).ready(function() {
         closeModal();
     });
 
-    // Close modal when clicking outside of it
     $(window).on('click', function(event) {
         const modal = $('#movieModal');
         if (event.target == modal[0]) {
             closeModal();
         }
     });
+
 });
 
 const toggleBtn = document.querySelector('.toggle_btn');
