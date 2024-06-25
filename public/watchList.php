@@ -113,7 +113,7 @@
                     <div class="not-logged-in-content">
                         <h2>You are not logged in.</h2>
                         <p>To see your Watch List, you need to log in first.</p>
-                        <p><a href="<?php echo BASE_URL; ?>login.php">Go to Login page.</a></p>
+                        <p><a href="login.php">Go to Login page.</a></p>
                     </div>
                 </div>
             </section>

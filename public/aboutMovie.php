@@ -137,7 +137,7 @@ if ($movieData && isset($movieData['credits']['cast'])) {
 
             const actorsContainer = document.getElementById('actors-container');
             actorsContainer.innerHTML = '';
-            data.credits.cast.slice(0, 5).forEach(actor => {
+            data.credits.cast.slice(0, 15).forEach(actor => {
                 const actorCard = document.createElement('div');
                 actorCard.className = 'actor-card';
                 actorCard.innerHTML = `

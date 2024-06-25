@@ -21,8 +21,8 @@ if ($genre !== 'all genres') {
 if ($year !== 'all years') {
     if (strpos($year, '-') !== false) {
         list($startYear, $endYear) = explode('-', $year);
-        $url .= '&primary_release_date.gte=' . $startYear . '-01-01';
-        $url .= '&primary_release_date.lte=' . $endYear . '-12-31';
+        $url .= '&primary_release_date.gte=' . $endYear . '-01-01';
+        $url .= '&primary_release_date.lte=' . $startYear . '-12-31';
     } else {
         $url .= '&primary_release_year=' . $year;
     }
@@ -33,7 +33,7 @@ if (!empty($searchQuery)) {
 if (!empty($title)) {
     $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $apiKey . '&query=' . urlencode($title);
 }
-
+$actorId = null;
 if (!empty($actor)) {
     $actorSearchUrl = 'https://api.themoviedb.org/3/search/person?api_key=' . $apiKey . '&query=' . urlencode($actor);
     $actorResponse = file_get_contents($actorSearchUrl);
@@ -47,6 +47,10 @@ if (!empty($actor)) {
 
 $response = file_get_contents($url);
 $data = json_decode($response, true);
+echo '<script>';
+echo 'const actorId = ' . json_encode($actorId) . ';'; 
+echo 'const apiKey = ' . json_encode($apiKey) . ';'; 
+echo '</script>';
 ?>
 
 <!DOCTYPE html>
@@ -172,6 +176,7 @@ $data = json_decode($response, true);
                     $posterPath = 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'];
                     $releaseYear = date('Y', strtotime($movie['release_date']));
                     $rating = $movie['vote_average'];
+                    $movieId = $movie['id'];
 
                     echo '<div class="movie-card">';
                     echo '<div class="movie-id" style="display: none;">' . $movieId . '</div>';
@@ -317,6 +322,7 @@ $data = json_decode($response, true);
     }
 
     $(document).ready(function() {
+        const apiKey = '0136e68e78a0433f8b5bdcec484af43c';
         let currentPage = 1;
         let totalPages = 10;
 
@@ -333,15 +339,18 @@ $data = json_decode($response, true);
             const genre = urlParams.get('genre');
             const year = urlParams.get('year');
             const title = urlParams.get('title');
+            const actor = urlParams.get('actor');
             if (title) {
                 document.getElementById('searchInput').value = title || '';
             }
             let apiUrl = '';
-
+            if(actor){
+                apiUrl = 'https://api.themoviedb.org/3/person/' + actorId + '/movie_credits?api_key=' + apiKey + '&page=' + page;
+            }
             if (title) {
-                apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=<?= $apiKey ?>&query=' + encodeURIComponent(title) + '&page=' + page;
+                apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=' + apiKey + '&query=' + encodeURIComponent(title) + '&page=' + page;
             } else {
-                apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=<?= $apiKey ?>';
+                apiUrl = 'https://api.themoviedb.org/3/discover/movie?api_key=' + apiKey;
                 if (genre && genre !== 'all genres') {
                     apiUrl += '&with_genres=' + encodeURIComponent(genre);
                 }
@@ -428,8 +437,6 @@ $data = json_decode($response, true);
                 alert('No more pages to load');
             }
         }
-
-        fetchMovies(1, true);
         function fetchMovieDetailsByTitle(movieTitle, movieId) {
             const apiKey = '0136e68e78a0433f8b5bdcec484af43c';
             const apiUrl = 'https://api.themoviedb.org/3/search/movie?api_key=0136e68e78a0433f8b5bdcec484af43c' + '&query=' + encodeURIComponent(movieTitle);

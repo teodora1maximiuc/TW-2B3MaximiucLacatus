@@ -63,7 +63,9 @@
                     <li><a href="explore.php">Explore</a></li>
                     <li><a href="statistics.php" class="active">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
-                    <li><a href="user_management.php">User Management</a></li>
+                    <?php if(isAdmin()) : ?>
+                        <li><a href="user_management.php">User Management</a></li>
+                    <?php endif; ?>
                     <?php if(!isset($_SESSION['user_id'])) : ?> 
                         <li><a href="login.php">Login</a></li>
                     <?php else : ?>
@@ -84,7 +86,9 @@
                     <li><a href="explore.php">Explore</a></li>
                     <li><a href="statistics.php" class="active">Statistics</a></li>
                     <li><a href="help.php">Help</a></li>
-                    <li><a href="user_management.php">User Management</a></li>
+                    <?php if(isAdmin()) : ?>
+                        <li><a href="user_management.php">User Management</a></li>
+                    <?php endif; ?>
                     <?php if(!isset($_SESSION['user_id'])) : ?> 
                     <li><a href="login.php">Login</a></li>
                     <?php else : ?>
@@ -261,7 +265,7 @@
                         datasets.forEach((dataset, datasetIndex) => {
                             const x = index * barWidth;
                             const barHeight = (dataset.data[index] / Math.max(...dataset.data)) * height;
-                            const color = dataset.backgroundColor[index];
+                            const color = dataset.backgroundColor[index%6];
                             svg += `<rect x="${x}" y="0" width="${barWidth - 1}" height="${barHeight}" fill="${color}" />`;
                         });
                     });
