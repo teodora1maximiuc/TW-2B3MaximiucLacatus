@@ -102,6 +102,7 @@
                  <li><a href="#software-attributes">5.3 Calitățile Software </a></li>
             </ul>
         </li>
+        <li><a href="#c4">6. Diagrama C4</a></li>
     </ul>
     <div role="contentinfo">
         <section id="authors" typeof="sa:AuthorsList">
@@ -517,6 +518,19 @@
                     </ul>
                 </section>
             </section>
+        </section>
+        <section id="c4">
+            <h3>6. Diagrama C4</h3>
+            <ul>
+                <li class="pictures" style="list-style: none">Nivelul 1: Context<img alt="overview" src="photos/level1.jpeg"
+                            width=800></li>
+                <li class="pictures" style="list-style: none">Nivelul 2: Containere<img alt="overview" src="photos/level2.jpeg"
+                            width=800></li>
+                <li class="pictures" style="list-style: none">Nivelul 3: Componente<img alt="overview" src="photos/level3.jpeg"
+                            width=800></li>
+                <li class="pictures" style="list-style: none">Nivelul 4: Cod<img alt="overview" src="photos/level4.png"
+                            width=800></li>
+            </ul>
         </section>
     </section>
 </article>
